@@ -39,7 +39,6 @@ document.addEventListener('DOMNodeInserted', (e) => {
         node.insertBefore(hatebu, link);
         setData(node, 'fh-done', true);
     } else if (includes(node.classList, 'headerInfo')) {
-        console.log(node);
         const header = node.parentNode.parentNode;
         const link = header.querySelector('a');
         const hatebu = generateHatebu(link.getAttribute('href'), 'fh-header');
