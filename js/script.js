@@ -28,6 +28,10 @@ const generateHatebu = (url, className) => {
         )]
     );
 };
+let showAfterTitle;
+chrome.storage.sync.get('showAfterTitle', (v) => {
+    showAfterTitle = v.showAfterTitle;
+});
 document.addEventListener('DOMNodeInserted', (e) => {
     const node = e.target;
     if (getData(node, 'fh-done')) {
@@ -36,7 +40,11 @@ document.addEventListener('DOMNodeInserted', (e) => {
     if (includes(node.classList, 'content')) {
         const link = node.querySelector('a');
         const hatebu = generateHatebu(link.getAttribute('href'), 'fh-list');
-        node.insertBefore(hatebu, link);
+		if (showAfterTitle) {
+			node.insertBefore(hatebu, link.nextSibling);
+		} else {
+			node.insertBefore(hatebu, link);
+		}
         setData(node, 'fh-done', true);
     } else if (includes(node.classList, 'headerInfo')) {
         const header = node.parentNode.parentNode;
@@ -47,3 +55,4 @@ document.addEventListener('DOMNodeInserted', (e) => {
         setData(node, 'fh-done', true);
     }
 });
+

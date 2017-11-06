@@ -14,5 +14,9 @@
       "css": ["css/style.css"],
       "js": ["js/script.js"]
     }
+  ],
+  "options_page": "html/options.html",
+  "permissions": [
+    "storage"
   ]
 }
