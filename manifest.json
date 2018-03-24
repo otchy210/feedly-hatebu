@@ -1,6 +1,6 @@
 {
   "name": "Feedly はてブ",
-  "version": "0.9.1",
+  "version": "0.9.2",
   "manifest_version": 2,
   "description": "はてなブックマークの情報を Feedly 上に表示します。",
   "icons": {

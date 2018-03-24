@@ -24,7 +24,7 @@ const generateHatebu = (url, className) => {
     }
     return newNode(
         'a', {'href': 'http://b.hatena.ne.jp/entry/' + url, 'target': '_blank', 'class': className}, [newNode(
-            'img', {'src': '//b.st-hatena.com/entry/image/' + url}
+            'img', {'src': '//b.hatena.ne.jp/entry/image/' + url}
         )]
     );
 };
