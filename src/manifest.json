@@ -1,0 +1,28 @@
+{
+    "name": "Feedly はてブ",
+    "version": "${version}",
+    "manifest_version": 2,
+    "description": "${description}",
+    "icons": {
+        "16": "img/icon16.png",
+        "48": "img/icon48.png",
+        "128": "img/icon128.png"
+    },
+    "permissions": [
+        "management",
+        "storage"
+    ],
+    "options_page": "options.html",
+    "content_scripts": [
+        {
+            "matches": ["https://feedly.com/i/collection/*", "https://feedly.com/i/subscription/*"],
+            "js": ["js/content.js"]
+        }
+    ],
+    "web_accessible_resources": [
+        "img/icon48.png",
+        "img/icon-in.svg",
+        "img/icon-out.svg",
+        "img/icon-lunch.svg"
+    ]
+}
