@@ -9,8 +9,6 @@
         "128": "img/icon128.png"
     },
     "permissions": [
-        "management",
-        "storage"
     ],
     "options_page": "options.html",
     "content_scripts": [
