@@ -24,6 +24,7 @@
     "webpack-cli": "^4.2.0"
   },
   "dependencies": {
+    "node-cache": "^5.1.2",
     "styled-components": "^5.2.1"
   }
 }
