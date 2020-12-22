@@ -9,6 +9,9 @@ const jsonpCallbackName = 'feedlyHatebuJsonpCallback';
 const jsonResultIdPrefix = 'feedlyHatebuResult'
 jsonpScript.innerHTML = `
 const ${jsonpCallbackName} = (json) => {
+    if (!json) {
+        return;
+    }
     const script = document.createElement('script');
     script.setAttribute('type', 'text/json');
     script.setAttribute('id', \`${jsonResultIdPrefix}-\${json.requested_url}\`);
@@ -53,26 +56,50 @@ const getHatebu = async (url) => {
     script.setAttribute('async', 'async');
     document.head.appendChild(script);
     const result = await awaitResult(url);
+    document.head.removeChild(script);
     if (!result) {
         return false;
     }
     return await sendMessage('CACHE_HATEBU', {result});
 };
 
-const handleEntry = async (entry) => {
-    const url = entry.getAttribute('data-alternate-link');
-    const hatebu = await getHatebu(url);
-    if (!hatebu) {
-        console.error(`[Feedlyはてブ] はてブ情報のロードに失敗しました。(${url})`);
-        return;
-    }
-    console.log(hatebu);
+const createBadge = (hatebu) => {
+    const {count, entry} = hatebu;
+    const badge = document.createElement('span');
+    const link = document.createElement('a');
+    link.setAttribute('href', entry);
+    link.setAttribute('target', '_blank');
+    link.innerText = count;
+    badge.appendChild(link);
+    return badge;
 };
 
-const handleEntryBody = async (entryBody) => {
-    // console.log(entryBody);
-    // const results = await sendMessage('DO_SOMETHING', {i: 1});
-    // console.log(results);
+const getHabetuBadge = async (url) => {
+    const hatebu = await getHatebu(url);
+    if (!hatebu) {
+        return false;
+    }
+    return createBadge(hatebu);
+};
+
+const handleEntry = async (entry) => {
+    const url = entry.getAttribute('data-alternate-link');
+    const badge = await getHabetuBadge(url);
+    if (!badge) {
+        return;
+    }
+    const content = entry.querySelector('.content');
+    content.insertBefore(badge, content.firstChild);
+};
+
+const handleU100Entry = async (entry) => {
+    const url = entry.getAttribute('data-alternate-link');
+    const badge = await getHabetuBadge(url);
+    if (!badge) {
+        return;
+    }
+    const metadata = entry.querySelector('.metadata.EntryMetadata');
+    metadata.insertBefore(badge, metadata.firstChild);
 };
 
 document.addEventListener('DOMNodeInserted', (e) => {
@@ -80,14 +107,14 @@ document.addEventListener('DOMNodeInserted', (e) => {
         return;
     }
     const entries = e.target.querySelectorAll('.entry');
-    const entryBodies = e.target.querySelectorAll('.entryBody');
-    if (entries.length === 0 && entryBodies.length === 0) {
+    const u100Entries = e.target.querySelectorAll('.u100Entry');
+    if (entries.length === 0 && u100Entries.length === 0) {
         return;
     }
     for (const entry of entries) {
         handleEntry(entry);
     }
-    for (const entryBody of entryBodies) {
-        handleEntryBody(entryBody);
+    for (const u100entry of u100Entries) {
+        handleU100Entry(u100entry);
     }
 });
