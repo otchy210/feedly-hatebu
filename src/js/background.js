@@ -25,7 +25,6 @@ const cacheHatebu = (payload, callback) => {
 // handle messages
 const messageHandler = async (message, sender, callback) => {
     const {action, payload} = message;
-    console.log(action, payload);
     switch (action) {
         case 'GET_HATEBU_CACHE':
             getHatebuCache(payload, callback);

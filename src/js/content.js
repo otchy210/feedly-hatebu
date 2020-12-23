@@ -6,17 +6,14 @@ const sendMessage = (action, payload) => {
 
 const jsonpScript = document.createElement('script');
 const jsonpCallbackName = 'feedlyHatebuJsonpCallback';
-const jsonResultIdPrefix = 'feedlyHatebuResult'
+const jsonpResultIdPrefix = 'feedlyHatebuResult'
 jsonpScript.innerHTML = `
 const ${jsonpCallbackName} = (json) => {
     if (!json) {
         return;
     }
-    const script = document.createElement('script');
-    script.setAttribute('type', 'text/json');
-    script.setAttribute('id', \`${jsonResultIdPrefix}-\${json.requested_url}\`);
-    script.innerHTML = JSON.stringify(json);
-    document.head.appendChild(script);
+    const resultScript = document.getElementById(\`${jsonpResultIdPrefix}-\${json.requested_url}\`);
+    resultScript.innerHTML = JSON.stringify(json);
 };
 `;
 document.head.appendChild(jsonpScript);
@@ -28,15 +25,13 @@ const waitFor = (msec) => {
 }
 
 const awaitResult = async (url) => {
-    const timeout = 2000;
+    const timeout = 1200;
     let msec = 100;
     while (true) {
         await waitFor(msec);
-        const resultNode = document.getElementById(`${jsonResultIdPrefix}-${url}`);
-        if (resultNode) {
-            const result = JSON.parse(resultNode.innerHTML);
-            document.head.removeChild(resultNode);
-            return result;
+        const resultNode = document.getElementById(`${jsonpResultIdPrefix}-${url}`);
+        if (resultNode?.innerHTML?.length > 0) {
+            return JSON.parse(resultNode.innerHTML);
         } else if (msec > timeout) {
             return false;
         }
@@ -51,16 +46,26 @@ const getHatebu = async (url) => {
     }
     const encodedUrl = encodeURIComponent(url);
     const jsonpUrl = `https://b.hatena.ne.jp/entry/jsonlite/?url=${encodedUrl}&callback=${jsonpCallbackName}`;
-    const script = document.createElement('script');
-    script.setAttribute('src', jsonpUrl);
-    script.setAttribute('async', 'async');
-    document.head.appendChild(script);
+    const jsonpCallerScript = document.createElement('script');
+    jsonpCallerScript.setAttribute('src', jsonpUrl);
+    jsonpCallerScript.setAttribute('async', 'async');
+    document.head.appendChild(jsonpCallerScript);
+    const jsonpResultScript = document.createElement('script');
+    jsonpResultScript.setAttribute('type', 'text/json');
+    jsonpResultScript.setAttribute('id', `${jsonpResultIdPrefix}-${url}`);
+    document.head.appendChild(jsonpResultScript);
     const result = await awaitResult(url);
-    document.head.removeChild(script);
-    if (!result) {
-        return false;
+    document.head.removeChild(jsonpCallerScript);
+    document.head.removeChild(jsonpResultScript);
+    if (result) {
+        return await sendMessage('CACHE_HATEBU', {result});
+    } else {
+        return await sendMessage('CACHE_HATEBU', {result: {
+            requested_url: url,
+            count: 0,
+            entry_url: ''
+        }});
     }
-    return await sendMessage('CACHE_HATEBU', {result});
 };
 
 const createBadge = (hatebu) => {
@@ -76,10 +81,11 @@ const createBadge = (hatebu) => {
 
 const getHabetuBadge = async (url) => {
     const hatebu = await getHatebu(url);
-    if (!hatebu) {
+    if (hatebu?.count > 0) {
+        return createBadge(hatebu);
+    } else {
         return false;
     }
-    return createBadge(hatebu);
 };
 
 const handleEntry = async (entry) => {
