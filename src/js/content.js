@@ -105,11 +105,19 @@ const handleU100Entry = async (entry) => {
 };
 
 document.addEventListener('DOMNodeInserted', (e) => {
-    if (!e.target || !e.target.querySelectorAll) {
+    const target = e.target;
+    if (!target?.querySelectorAll) {
         return;
     }
-    const entries = e.target.querySelectorAll('.entry');
-    const u100Entries = e.target.querySelectorAll('.u100Entry');
+    if (target.classList.contains('entry')) {
+        handleEntry(target);
+        return;
+    } else if (target.classList.contains('u100Entry')) {
+        handleU100Entry(target);
+        return;
+    }
+    const entries = target.querySelectorAll('.entry');
+    const u100Entries = target.querySelectorAll('.u100Entry');
     if (entries.length === 0 && u100Entries.length === 0) {
         return;
     }
