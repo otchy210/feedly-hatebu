@@ -9,6 +9,7 @@
         "128": "img/icon128.png"
     },
     "permissions": [
+        "storage"
     ],
     "background": {
         "scripts": ["js/background.js"],

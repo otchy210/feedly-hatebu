@@ -1,4 +1,5 @@
 import NodeCache from 'node-cache';
+import { getSynced, setSynced } from './common';
 
 const hatebuCache = new NodeCache({stdTTL: 600, checkperiod: 60});
 
@@ -37,3 +38,14 @@ const messageHandler = async (message, sender, callback) => {
 };
 chrome.runtime.onMessage.addListener(messageHandler);
 chrome.runtime.onMessageExternal.addListener(messageHandler);
+
+const init = async () => {
+    const manifest = chrome.runtime.getManifest();
+    const currentVersion = manifest.version;
+    const seenVersion = await getSynced('seenVersion', '');
+    if (currentVersion !== seenVersion) {
+        setSynced('seenVersion', currentVersion);
+        chrome.runtime.openOptionsPage();
+    }
+};
+init();

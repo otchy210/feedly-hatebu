@@ -1,8 +1,4 @@
-const sendMessage = (action, payload) => {
-    return new Promise(resolve => {
-        chrome.runtime.sendMessage(chrome.runtime.id, {action, payload}, null, resolve);
-    });
-}
+import { sendMessage } from './common';
 
 const jsonpScript = document.createElement('script');
 const jsonpCallbackName = 'feedlyHatebuJsonpCallback';
