@@ -40,12 +40,16 @@ chrome.runtime.onMessage.addListener(messageHandler);
 chrome.runtime.onMessageExternal.addListener(messageHandler);
 
 const init = async () => {
-    const manifest = chrome.runtime.getManifest();
-    const currentVersion = manifest.version;
+    const currentVersion = chrome.runtime.getManifest().version;
     const seenVersion = await getSynced('seenVersion', '');
     if (currentVersion !== seenVersion) {
         setSynced('seenVersion', currentVersion);
         chrome.runtime.openOptionsPage();
     }
+    chrome.management.get(chrome.runtime.id, ({ installType }) => {
+        if (installType === 'development') {
+            chrome.runtime.openOptionsPage();
+        }
+    });
 };
 init();

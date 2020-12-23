@@ -9,6 +9,7 @@
         "128": "img/icon128.png"
     },
     "permissions": [
+        "management",
         "storage"
     ],
     "background": {
@@ -23,9 +24,6 @@
         }
     ],
     "web_accessible_resources": [
-        "img/icon48.png",
-        "img/icon-in.svg",
-        "img/icon-out.svg",
-        "img/icon-lunch.svg"
+        "img/icon128.png"
     ]
 }
