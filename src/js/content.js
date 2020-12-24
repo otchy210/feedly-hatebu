@@ -1,5 +1,44 @@
 import { sendMessage } from './common';
 
+const style = document.createElement('style');
+style.innerHTML = `
+.fh-badge {
+    padding: 0 0 2px 0;
+    border-bottom-color: #ff0808;
+    background-color: #ffcbcb;
+    font-family: monospace;
+    font-size: 12px;
+    color: #ff0808;
+    text-shadow: 1px 0 #ff0808;
+}
+.fh-badge.fh-badge-one,
+.fh-badge.fh-badge-lt10 {
+    border-bottom-color: #ff6565;
+    background-color: #ffeeee;
+    color: #ff6565;
+    text-shadow: 1px 0 #ff6565;
+}
+.fh-badge a {
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-bottom-color: inherit;
+    color: inherit;
+}
+.metadata .fh-badge a:hover,
+.fx .entry .fh-badge a:hover {
+    color: inherit;
+    text-decoration: none;
+}
+.fh-badge a::after {
+    content: "users";
+    margin-left: 2px;
+}
+.fh-badge.fh-badge-one a::after {
+    content: "user";
+}
+`;
+document.head.appendChild(style);
+
 const jsonpScript = document.createElement('script');
 const jsonpCallbackName = 'feedlyHatebuJsonpCallback';
 const jsonpResultIdPrefix = 'feedlyHatebuResult'
@@ -72,6 +111,12 @@ const createBadge = (hatebu) => {
     link.setAttribute('target', '_blank');
     link.innerText = count;
     badge.appendChild(link);
+    badge.classList.add('fh-badge');
+    if (count === 1) {
+        badge.classList.add('fh-badge-one');
+    } else if (count < 10) {
+        badge.classList.add('fh-badge-lt10');
+    }
     return badge;
 };
 
