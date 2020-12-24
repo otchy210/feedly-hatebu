@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
 import { getSynced, setSynced } from '../common';
-import { Section, SectionTitle, SectionBody, Link } from './common';
 import ReleaseNotes from './ReleaseNotes';
+import Options from './Options';
 
 const GlobalStyle = createGlobalStyle`
     body {
@@ -62,12 +62,7 @@ const OptionsPage = () => {
         <PageWrapper>
             <PageTitle><Feedly>Feedly</Feedly> <Hatebu>はてブ</Hatebu></PageTitle>
             {notesPos === 'top' ? <ReleaseNotes handleClick={handleClick} /> : null}
-            <Section>
-                <SectionTitle>オプション</SectionTitle>
-                <SectionBody>
-                    オプションオプション
-                </SectionBody> 
-            </Section>
+            <Options />
             {notesPos === 'bottom' ? <ReleaseNotes /> : null}
         </PageWrapper>
     </>

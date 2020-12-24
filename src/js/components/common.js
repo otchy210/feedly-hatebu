@@ -4,7 +4,7 @@ export const Section = styled.section`
 `;
 
 export const SectionTitle = styled.h2`
-    margin-top: 12px;
+    margin: 12px 0 0 0;
     padding: 0 4px;
     border-bottom: 2px solid;
     border-image: linear-gradient(to right, #6cc655 0%, #00a4de 100%);
@@ -15,7 +15,7 @@ export const SectionTitle = styled.h2`
 `;
 
 export const SectionBody = styled.div`
-    margin-top: 12px;
+    margin: 12px 0 0 0;
     padding: 0 4px;
     font-size: 16px;
     line-height: 24px;
