@@ -87,7 +87,7 @@ const insertStyle = async () => {
             case 'left':
                 return `
                     .${listEntriesClass} .metadata .fh-badge {
-                        margin: 0 4px 0 0;
+                        margin: 0 8px 0 0;
                     }
                 `;
             case 'right':
@@ -96,18 +96,65 @@ const insertStyle = async () => {
                         display: flex;
                     }
                     .${listEntriesClass} .metadata .fh-badge {
-                        margin: 0 0 0　4px;
+                        margin: 0 0 0 8px;
                         order: 1;
                     }
                 `;
         }
     })(positions.titleOnly_Meta) : '';
+    const magagineStyle = visibilities.magagine ? ((position) => {
+        const listEntriesClass = feedly.listEntriesClasses.magagine;
+        const contentSelector = `.${listEntriesClass} .entry.u4 .content`;
+        const metaBadgeSelector = `${contentSelector} .metadata .fh-badge`;
+        const topBadgeSelector = `${contentSelector} > .fh-badge`;
+        const imageBadgeSelector = `.${listEntriesClass} .entry.u4 .visual .fh-badge`;
+        switch (position) {
+            case 'left':
+                return `
+                    ${[topBadgeSelector, imageBadgeSelector].join(',')} { display: none; }
+                    ${metaBadgeSelector} {
+                        margin: 0 12px 0 0;
+                    }
+                `;
+            case 'right':
+                return `
+                    ${[topBadgeSelector, imageBadgeSelector].join(',')} { display: none; }
+                    ${contentSelector} .metadata {
+                        display: flex;
+                    }
+                    ${metaBadgeSelector} {
+                        margin: 0 0 0　12px;
+                        order: 1;
+                    }
+                `;
+            case 'top':
+                return `
+                    ${[metaBadgeSelector, imageBadgeSelector].join(',')} { display: none; }
+                    ${contentSelector} .title {
+                        margin-top: 16px;
+                    }
+                    ${topBadgeSelector} {
+                        position: absolute;
+                    }
+                `;
+            case 'image':
+                return `
+                    ${[metaBadgeSelector, topBadgeSelector].join(',')} { display: none; }
+                    ${imageBadgeSelector} {
+                        position: absolute;
+                        top: 1px;
+                        left: 1px;
+                    }
+                `;
+        }
+    })(positions.magagine) : '';
 
     const styles = `
         ${defaultStyle}
         ${visibilitiesStyle}
         ${titleOnlyPositionStyle}
         ${titleOnlyMetaStyle}
+        ${magagineStyle}
     `.split(/\s+/).join(' ').replaceAll(/\s*([{}:;,])\s*/g, '$1').trim();
 
     const style = document.createElement('style');
@@ -217,6 +264,18 @@ const handleEntry = async (entry) => {
     }
     const content = entry.querySelector('.content');
     content.insertBefore(badge, content.firstChild);
+
+    const metadata = content.querySelector('.metadata');
+    if (metadata) {
+        const metadataBadge = await getHabetuBadge(url);
+        metadata.insertBefore(metadataBadge, metadata.firstChild);
+    }
+
+    const visual = entry.querySelector('.visual');
+    if (visual) {
+        const visualBadge = await getHabetuBadge(url);
+        visual.appendChild(visualBadge);
+    }
 };
 
 const handleU100Entry = async (entry) => {

@@ -14,9 +14,9 @@ const defaultOptions = {
     positions: {
         titleOnly: 'left',
         titleOnly_Meta: 'left',
-        magagine: '',
-        cards: '',
-        article: ''
+        magagine: 'left',
+        cards: 'left',
+        article: 'left'
     },
 };
 
@@ -133,6 +133,17 @@ const OptionsTable = ({ setEdited }) => {
                     updateVisibilities={updateVisibilities}
                 />
             </Td>
+            <Td>
+                <Flex>
+                    <PositionRadioButtonGroup
+                        name="magagine"
+                        values={[['left', '左側'], ['right', '右側'], ['top', '上部'], ['image', '画像上']]}
+                        visibilities={visibilities}
+                        positions={positions}
+                        updatePositions={updatePositions}
+                    />
+                </Flex>
+            </Td>
         </Tr>
         <Tr>
             <Td>
@@ -143,6 +154,17 @@ const OptionsTable = ({ setEdited }) => {
                     updateVisibilities={updateVisibilities}
                 />
             </Td>
+            <Td>
+                <Flex>
+                    <PositionRadioButtonGroup
+                        name="cards"
+                        values={[['left', '左側'], ['right', '右側']]}
+                        visibilities={visibilities}
+                        positions={positions}
+                        updatePositions={updatePositions}
+                    />
+                </Flex>
+            </Td>
         </Tr>
         <Tr>
             <Td>
@@ -152,6 +174,17 @@ const OptionsTable = ({ setEdited }) => {
                     visibilities={visibilities}
                     updateVisibilities={updateVisibilities}
                 />
+            </Td>
+            <Td>
+                <Flex>
+                    <PositionRadioButtonGroup
+                        name="article"
+                        values={[['left', '左側'], ['right', '右側']]}
+                        visibilities={visibilities}
+                        positions={positions}
+                        updatePositions={updatePositions}
+                    />
+                </Flex>
             </Td>
         </Tr>
     </Table>;
