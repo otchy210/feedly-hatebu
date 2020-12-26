@@ -13,13 +13,15 @@ const insertStyle = async () => {
     const options = await getSynced('options');
     const defaultStyle = `
     .fh-badge {
-        padding: 0 0 2px 0;
+        padding: 0 0 1px 0;
         border-bottom-color: #ff0808;
+        height: 15px;
         background-color: #ffcbcb;
         font-family: monospace;
         font-size: 12px;
         color: #ff0808;
         text-shadow: 1px 0 #ff0808;
+        line-height: 15px;
     }
     .fh-badge.fh-badge-one,
     .fh-badge.fh-badge-lt10 {
@@ -54,7 +56,7 @@ const insertStyle = async () => {
     }).join('\n');
 
     const { positions } = options;
-    const titleOnlyPositionStyle = ((position) => {
+    const titleOnlyPositionStyle = visibilities.titleOnly ? ((position) => {
         const listEntriesClass = feedly.listEntriesClasses.titleOnly;
         switch (position) {
             case 'left':
@@ -65,29 +67,48 @@ const insertStyle = async () => {
                 `;
             case 'right':
                 return `
+                    .${listEntriesClass} .entry.u0 .content {
+                        position: relative;
+                    }
                     .${listEntriesClass} .content .fh-badge {
                         position: absolute;
-                        right: 2em;
-                        margin: 0 4px 0 0;
+                        right: 0;
                         box-shadow: -4px 0 0 #fff;
                     }
-                    .fx .entry.u0:hover .content .fh-badge {
+                    .${listEntriesClass} .entry.u0:hover .content .fh-badge {
                         display: none;
                     }
                 `;
         }
-    })(positions.titleOnly);
+    })(positions.titleOnly) : '';
+    const titleOnlyMetaStyle = visibilities.titleOnly ? ((position) => {
+        const listEntriesClass = feedly.listEntriesClasses.titleOnly;
+        switch (position) {
+            case 'left':
+                return `
+                    .${listEntriesClass} .metadata .fh-badge {
+                        margin: 0 4px 0 0;
+                    }
+                `;
+            case 'right':
+                return `
+                    .${listEntriesClass} .entryHeader .metadata {
+                        display: flex;
+                    }
+                    .${listEntriesClass} .metadata .fh-badge {
+                        margin: 0 0 0　4px;
+                        order: 1;
+                    }
+                `;
+        }
+    })(positions.titleOnly_Meta) : '';
 
     const styles = `
         ${defaultStyle}
         ${visibilitiesStyle}
-        ${titleOnlyPositionStyle}`.trim()
-        .split(/[ \n]+/).join(' ')
-        .split(' { ').join('{')
-        .split(' } ').join('}')
-        .split(': ').join(':')
-        .split('; ').join(';')
-        .split(', ').join(',');
+        ${titleOnlyPositionStyle}
+        ${titleOnlyMetaStyle}
+    `.split(/\s+/).join(' ').replaceAll(/\s*([{}:;,])\s*/g, '$1').trim();
 
     const style = document.createElement('style');
     style.innerHTML = styles;
@@ -107,7 +128,7 @@ const insertJsonpScript = () => {
         const resultScript = document.getElementById(\`${jsonpResultIdPrefix}-\${json.requested_url}\`);
         resultScript.innerHTML = JSON.stringify(json);
     };
-    `;
+    `.split(/\s+/).join(' ').replaceAll(/\s*([{}();=])\s*/g, '$1').trim();;
     document.head.appendChild(jsonpScript);
 };
 

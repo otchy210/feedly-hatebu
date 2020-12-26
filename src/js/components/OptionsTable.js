@@ -7,12 +7,13 @@ import PositionRadioButtonGroup from './PositionRadioButtonGroup';
 const defaultOptions = {
     visibilities: {
         titleOnly: true,
-        magagine: true,
-        cards: true,
-        article: true
+        magagine: false,
+        cards: false,
+        article: false
     },
     positions: {
         titleOnly: 'left',
+        titleOnly_Meta: 'left',
         magagine: '',
         cards: '',
         article: ''
@@ -30,6 +31,10 @@ const Th = styled.th`
 `;
 
 const Td = styled.td`
+`;
+
+const Flex = styled.div`
+    display: flex;
 `;
 
 const OptionsTable = ({ setEdited }) => {
@@ -101,13 +106,22 @@ const OptionsTable = ({ setEdited }) => {
                 />
             </Td>
             <Td>
-                <PositionRadioButtonGroup
-                    name="titleOnly"
-                    values={[['left', '左側'], ['right', '右側']]}
-                    visibilities={visibilities}
-                    positions={positions}
-                    updatePositions={updatePositions}
-                />
+                <Flex>
+                    <PositionRadioButtonGroup
+                        name="titleOnly"
+                        values={[['left', '一覧左側'], ['right', '一覧右側']]}
+                        visibilities={visibilities}
+                        positions={positions}
+                        updatePositions={updatePositions}
+                    />
+                    <PositionRadioButtonGroup
+                        name="titleOnly_Meta"
+                        values={[['left', '詳細左側'], ['right', '詳細右側']]}
+                        visibilities={visibilities}
+                        positions={positions}
+                        updatePositions={updatePositions}
+                    />
+                </Flex>
             </Td>
         </Tr>
         <Tr>

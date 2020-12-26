@@ -9,13 +9,14 @@ const Label = styled.label`
     border-color: ${props => props.checked ? lineGrey : 'transparent'};
     border-radius: 4px;
     opacity: ${props => props.disabled ? '0.5' : '1'};
+    cursor: pointer;
 `;
 
 const RadioButton = styled.input.attrs({type: 'radio'})`
 `;
 
 const PositionRadioButton = ({name, value, label, visibilities, positions, updatePositions}) => {
-    const disabled = !visibilities[name];
+    const disabled = !visibilities[name.split('_')[0]];
     const checked = positions[name] === value;
     return <Label disabled={disabled} checked={checked}>
         <RadioButton disabled={disabled} checked={checked} onChange={() => updatePositions(name, value)}/> {label}

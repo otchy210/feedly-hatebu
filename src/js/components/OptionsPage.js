@@ -21,9 +21,9 @@ const PageWrapper = styled.div`
     padding: 12px;
     background-color: #fff;
     box-shadow: 0 0 5px rgba(0,0,0,0.3);
-    min-width: 600px;
+    min-width: 800px;
     width: 80vw;
-    max-width: 1000px;
+    max-width: 1200px;
     min-height: 100vh;
 `;
 
