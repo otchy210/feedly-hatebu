@@ -1,7 +1,7 @@
 import { sendMessage, getSynced } from './common';
 
 const feedly = {
-    listEntriesClass: {
+    listEntriesClasses: {
         titleOnly: 'list-entries--layout-u0',
         magagine: 'list-entries--layout-u4',
         cards: 'list-entries--layout-u5',
@@ -47,13 +47,43 @@ const insertStyle = async () => {
         content: "user";
     }
     `;
+
     const { visibilities } = options;
-    const visibilitiesStyle = Object.entries(visibilities)
-    .map(([name, visible]) => {
-        return visible ? '' : `.${feedly.listEntriesClass[name]} .fh-badge { display: none; }`;
+    const visibilitiesStyle = Object.entries(visibilities).map(([name, visible]) => {
+        return visible ? '' : `.${feedly.listEntriesClasses[name]} .fh-badge { display: none; }`;
     }).join('\n');
+
+    const { positions } = options;
+    const titleOnlyPositionStyle = ((position) => {
+        const listEntriesClass = feedly.listEntriesClasses.titleOnly;
+        switch (position) {
+            case 'left':
+                return `
+                    .${listEntriesClass} .content .fh-badge {
+                        margin: 0 4px 0 0;
+                    }
+                `;
+            case 'right':
+                return `
+                .${listEntriesClass} .content .fh-badge {
+                    position: absolute;
+                    right: 2em;
+                    margin: 0 4px 0 0;
+                    box-shadow: -4px 0 0 #fff;
+                }
+                .fx .entry.u0:hover .content .fh-badge {
+                    display: none;
+                }
+            `;
+        }
+    })(positions.titleOnly);
+
     const style = document.createElement('style');
-    style.innerHTML = defaultStyle + visibilitiesStyle;
+    style.innerHTML = `
+        ${defaultStyle}
+        ${visibilitiesStyle}
+        ${titleOnlyPositionStyle}
+    `;
     document.head.appendChild(style);
 };
 
