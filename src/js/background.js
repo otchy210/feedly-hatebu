@@ -39,6 +39,11 @@ const messageHandler = async (message, sender, callback) => {
 chrome.runtime.onMessage.addListener(messageHandler);
 chrome.runtime.onMessageExternal.addListener(messageHandler);
 
+// extension icon clicked
+chrome.browserAction.onClicked.addListener(() => {
+    chrome.runtime.openOptionsPage();
+});
+
 const init = async () => {
     const currentVersion = chrome.runtime.getManifest().version;
     const seenVersion = await getSynced('seenVersion', '');
