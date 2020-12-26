@@ -1,57 +1,78 @@
-import { sendMessage } from './common';
+import { sendMessage, getSynced } from './common';
 
-const style = document.createElement('style');
-style.innerHTML = `
-.fh-badge {
-    padding: 0 0 2px 0;
-    border-bottom-color: #ff0808;
-    background-color: #ffcbcb;
-    font-family: monospace;
-    font-size: 12px;
-    color: #ff0808;
-    text-shadow: 1px 0 #ff0808;
-}
-.fh-badge.fh-badge-one,
-.fh-badge.fh-badge-lt10 {
-    border-bottom-color: #ff6565;
-    background-color: #ffeeee;
-    color: #ff6565;
-    text-shadow: 1px 0 #ff6565;
-}
-.fh-badge a {
-    border-bottom-style: solid;
-    border-bottom-width: 1px;
-    border-bottom-color: inherit;
-    color: inherit;
-}
-.metadata .fh-badge a:hover,
-.fx .entry .fh-badge a:hover {
-    color: inherit;
-    text-decoration: none;
-}
-.fh-badge a::after {
-    content: "users";
-    margin-left: 2px;
-}
-.fh-badge.fh-badge-one a::after {
-    content: "user";
-}
-`;
-document.head.appendChild(style);
+const feedly = {
+    listEntriesClass: {
+        titleOnly: 'list-entries--layout-u0',
+        magagine: 'list-entries--layout-u4',
+        cards: 'list-entries--layout-u5',
+        article: 'list-entries--layout-u100'
+    }
+};
 
-const jsonpScript = document.createElement('script');
+const insertStyle = async () => {
+    const options = await getSynced('options');
+    const defaultStyle = `
+    .fh-badge {
+        padding: 0 0 2px 0;
+        border-bottom-color: #ff0808;
+        background-color: #ffcbcb;
+        font-family: monospace;
+        font-size: 12px;
+        color: #ff0808;
+        text-shadow: 1px 0 #ff0808;
+    }
+    .fh-badge.fh-badge-one,
+    .fh-badge.fh-badge-lt10 {
+        border-bottom-color: #ff6565;
+        background-color: #ffeeee;
+        color: #ff6565;
+        text-shadow: 1px 0 #ff6565;
+    }
+    .fh-badge a {
+        border-bottom-style: solid;
+        border-bottom-width: 1px;
+        border-bottom-color: inherit;
+        color: inherit;
+    }
+    .metadata .fh-badge a:hover,
+    .fx .entry .fh-badge a:hover {
+        color: inherit;
+        text-decoration: none;
+    }
+    .fh-badge a::after {
+        content: "users";
+        margin-left: 2px;
+    }
+    .fh-badge.fh-badge-one a::after {
+        content: "user";
+    }
+    `;
+    const { visibilities } = options;
+    const visibilitiesStyle = Object.entries(visibilities)
+    .map(([name, visible]) => {
+        return visible ? '' : `.${feedly.listEntriesClass[name]} .fh-badge { display: none; }`;
+    }).join('\n');
+    const style = document.createElement('style');
+    style.innerHTML = defaultStyle + visibilitiesStyle;
+    document.head.appendChild(style);
+};
+
 const jsonpCallbackName = 'feedlyHatebuJsonpCallback';
 const jsonpResultIdPrefix = 'feedlyHatebuResult'
-jsonpScript.innerHTML = `
-const ${jsonpCallbackName} = (json) => {
-    if (!json) {
-        return;
-    }
-    const resultScript = document.getElementById(\`${jsonpResultIdPrefix}-\${json.requested_url}\`);
-    resultScript.innerHTML = JSON.stringify(json);
+
+const insertJsonpScript = () => {
+    const jsonpScript = document.createElement('script');
+    jsonpScript.innerHTML = `
+    const ${jsonpCallbackName} = (json) => {
+        if (!json) {
+            return;
+        }
+        const resultScript = document.getElementById(\`${jsonpResultIdPrefix}-\${json.requested_url}\`);
+        resultScript.innerHTML = JSON.stringify(json);
+    };
+    `;
+    document.head.appendChild(jsonpScript);
 };
-`;
-document.head.appendChild(jsonpScript);
 
 const waitFor = (msec) => {
     return new Promise(resolve => {
@@ -149,27 +170,34 @@ const handleU100Entry = async (entry) => {
     metadata.insertBefore(badge, metadata.firstChild);
 };
 
-document.addEventListener('DOMNodeInserted', (e) => {
-    const target = e.target;
-    if (!target?.querySelectorAll) {
-        return;
-    }
-    if (target.classList.contains('entry')) {
-        handleEntry(target);
-        return;
-    } else if (target.classList.contains('u100Entry')) {
-        handleU100Entry(target);
-        return;
-    }
-    const entries = target.querySelectorAll('.entry');
-    const u100Entries = target.querySelectorAll('.u100Entry');
-    if (entries.length === 0 && u100Entries.length === 0) {
-        return;
-    }
-    for (const entry of entries) {
-        handleEntry(entry);
-    }
-    for (const u100entry of u100Entries) {
-        handleU100Entry(u100entry);
-    }
-});
+const watchDomChange = () => {
+    document.addEventListener('DOMNodeInserted', (e) => {
+        const target = e.target;
+        if (!target?.querySelectorAll) {
+            return;
+        }
+        if (target.classList.contains('entry')) {
+            handleEntry(target);
+            return;
+        } else if (target.classList.contains('u100Entry')) {
+            handleU100Entry(target);
+            return;
+        }
+        const entries = target.querySelectorAll('.entry');
+        const u100Entries = target.querySelectorAll('.u100Entry');
+        if (entries.length === 0 && u100Entries.length === 0) {
+            return;
+        }
+        for (const entry of entries) {
+            handleEntry(entry);
+        }
+        for (const u100entry of u100Entries) {
+            handleU100Entry(u100entry);
+        }
+    });
+};
+
+// init
+insertJsonpScript();
+insertStyle();
+watchDomChange();

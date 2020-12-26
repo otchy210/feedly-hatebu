@@ -3,6 +3,7 @@ import styled, { createGlobalStyle } from 'styled-components';
 import { getSynced, setSynced } from '../common';
 import ReleaseNotes from './ReleaseNotes';
 import Options from './Options';
+import { hatenaBlue, feedlyGreen } from './colors';
 
 const GlobalStyle = createGlobalStyle`
     body {
@@ -39,11 +40,11 @@ const PageTitle = styled.h1`
 `;
 
 const Feedly = styled.span`
-    color: #6cc655;
+    color: ${feedlyGreen};
 `;
 
 const Hatebu = styled.span`
-    color: #00a4de;
+    color: ${hatenaBlue};
 `;
 
 const OptionsPage = () => {
