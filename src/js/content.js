@@ -168,6 +168,7 @@ const createBadge = (hatebu) => {
     link.setAttribute('href', entry);
     link.setAttribute('target', '_blank');
     link.innerText = count;
+    link.addEventListener('click', e => e.stopPropagation());
     badge.appendChild(link);
     badge.classList.add('fh-badge');
     if (count === 1) {
