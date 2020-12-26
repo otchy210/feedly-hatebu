@@ -65,25 +65,32 @@ const insertStyle = async () => {
                 `;
             case 'right':
                 return `
-                .${listEntriesClass} .content .fh-badge {
-                    position: absolute;
-                    right: 2em;
-                    margin: 0 4px 0 0;
-                    box-shadow: -4px 0 0 #fff;
-                }
-                .fx .entry.u0:hover .content .fh-badge {
-                    display: none;
-                }
-            `;
+                    .${listEntriesClass} .content .fh-badge {
+                        position: absolute;
+                        right: 2em;
+                        margin: 0 4px 0 0;
+                        box-shadow: -4px 0 0 #fff;
+                    }
+                    .fx .entry.u0:hover .content .fh-badge {
+                        display: none;
+                    }
+                `;
         }
     })(positions.titleOnly);
 
-    const style = document.createElement('style');
-    style.innerHTML = `
+    const styles = `
         ${defaultStyle}
         ${visibilitiesStyle}
-        ${titleOnlyPositionStyle}
-    `;
+        ${titleOnlyPositionStyle}`.trim()
+        .split(/[ \n]+/).join(' ')
+        .split(' { ').join('{')
+        .split(' } ').join('}')
+        .split(': ').join(':')
+        .split('; ').join(';')
+        .split(', ').join(',');
+
+    const style = document.createElement('style');
+    style.innerHTML = styles;
     document.head.appendChild(style);
 };
 
