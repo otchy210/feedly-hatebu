@@ -1,12 +1,10 @@
 import { sendMessage, getSynced } from './common';
 
-const feedly = {
-    listEntriesClasses: {
-        titleOnly: 'list-entries--layout-u0',
-        magagine: 'list-entries--layout-u4',
-        cards: 'list-entries--layout-u5',
-        article: 'list-entries--layout-u100'
-    }
+const listEntriesClasses = {
+    titleOnly: 'list-entries--layout-u0',
+    magagine: 'list-entries--layout-u4',
+    cards: 'list-entries--layout-u5',
+    article: 'list-entries--layout-u100'
 };
 
 const insertStyle = async () => {
@@ -58,15 +56,15 @@ const insertStyle = async () => {
         switch (name) {
             case 'titleOnly':
                 return `
-                    .${feedly.listEntriesClasses[name]} .content .fh-badge {
+                    .${listEntriesClasses[name]} .content .fh-badge {
                         display: none;
                     }
                 `;
             case 'magagine':
             case 'cards':
                     return `
-                    .${feedly.listEntriesClasses[name]} .visual .fh-badge,
-                    .${feedly.listEntriesClasses[name]} .content .fh-badge {
+                    .${listEntriesClasses[name]} .visual .fh-badge,
+                    .${listEntriesClasses[name]} .content .fh-badge {
                         display: none;
                     }
                 `;
@@ -81,7 +79,7 @@ const insertStyle = async () => {
 
     const { positions } = options;
     const titleOnlyPositionStyle = visibilities.titleOnly ? ((position) => {
-        const listEntriesClass = feedly.listEntriesClasses.titleOnly;
+        const listEntriesClass = listEntriesClasses.titleOnly;
         switch (position) {
             case 'left':
                 return `
@@ -106,7 +104,7 @@ const insertStyle = async () => {
         }
     })(positions.titleOnly) : '';
     // const titleOnlyMetaStyle = visibilities.titleOnly ? ((position) => {
-    //     const listEntriesClass = feedly.listEntriesClasses.titleOnly;
+    //     const listEntriesClass = listEntriesClasses.titleOnly;
     //     switch (position) {
     //         case 'left':
     //             return `
@@ -127,7 +125,7 @@ const insertStyle = async () => {
     //     }
     // })(positions.titleOnly_Meta) : '';
     const magaginePositionStyle = visibilities.magagine ? ((position) => {
-        const listEntriesClass = feedly.listEntriesClasses.magagine;
+        const listEntriesClass = listEntriesClasses.magagine;
         const contentSelector = `.${listEntriesClass} .entry.u4 .content`;
         const metaBadgeSelector = `${contentSelector} .metadata .fh-badge`;
         const topBadgeSelector = `${contentSelector} > .fh-badge`;
@@ -168,16 +166,59 @@ const insertStyle = async () => {
                         position: absolute;
                         top: 1px;
                         left: 1px;
+                        box-shadow: ${
+                            ['0', '1px'].map(x => ['0', '1px'].map(y => `${x} ${y} 0 #fff`).join(',')).join(',')
+                        };
                     }
                 `;
         }
     })(positions.magagine) : '';
+    const cardsPositionStyle = visibilities.cards ? ((position) => {
+        const listEntriesClass = listEntriesClasses.cards;
+        const contentSelector = `.${listEntriesClass} .entry.u5 .content`;
+        const metaBadgeSelector = `${contentSelector} .metadata .fh-badge`;
+        const topBadgeSelector = `${contentSelector} > .fh-badge`;
+        const imageBadgeSelector = `.${listEntriesClass} .entry.u5 .visual .fh-badge`;
+        switch (position) {
+            case 'left':
+                return `
+                    ${[topBadgeSelector, imageBadgeSelector].join(',')} { display: none; }
+                    ${metaBadgeSelector} {
+                        margin: 0 12px 0 0;
+                    }
+                `;
+            case 'right':
+                return `
+                    ${[topBadgeSelector, imageBadgeSelector].join(',')} { display: none; }
+                    ${contentSelector} .metadata {
+                        display: flex;
+                    }
+                    ${metaBadgeSelector} {
+                        margin: 0 0 0　12px;
+                        order: 1;
+                    }
+                `;
+            case 'image':
+                return `
+                    ${[topBadgeSelector, metaBadgeSelector].join(',')} { display: none; }
+                    ${imageBadgeSelector} {
+                        position: absolute;
+                        top: 8px;
+                        left: 8px;
+                        box-shadow: ${
+                            ['-2px', '0', '2px'].map(x => ['-2px', '0', '2px'].map(y => `${x} ${y} 0 #fff`).join(',')).join(',')
+                        };
+                    }
+                `;
+        }
+    })(positions.cards) : '';
 
     const styles = `
         ${defaultStyle}
         ${visibilitiesStyle}
         ${titleOnlyPositionStyle}
         ${magaginePositionStyle}
+        ${cardsPositionStyle}
     `.split(/\s+/).join(' ').replaceAll(/\s*([{}:;,])\s*/g, '$1').trim();
 
     const style = document.createElement('style');

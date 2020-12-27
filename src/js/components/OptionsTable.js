@@ -141,7 +141,7 @@ const OptionsTable = ({ setEdited }) => {
             <Td>
                 <PositionRadioButtonGroup
                     name="cards"
-                    values={[['left', '左側'], ['right', '右側']]}
+                    values={[['left', '左側'], ['right', '右側'], ['image', '画像上']]}
                     visibilities={visibilities}
                     positions={positions}
                     updatePositions={updatePositions}
