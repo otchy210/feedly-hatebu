@@ -9,11 +9,10 @@ const defaultOptions = {
         titleOnly: true,
         magagine: false,
         cards: false,
-        article: false
+        article: true
     },
     positions: {
         titleOnly: 'left',
-        titleOnly_Meta: 'left',
         magagine: 'left',
         cards: 'left',
         article: 'left'
@@ -31,10 +30,6 @@ const Th = styled.th`
 `;
 
 const Td = styled.td`
-`;
-
-const Flex = styled.div`
-    display: flex;
 `;
 
 const OptionsTable = ({ setEdited }) => {
@@ -100,91 +95,76 @@ const OptionsTable = ({ setEdited }) => {
             <Td>
                 <VisibilityCheckbox
                     name="titleOnly"
-                    label="Title-Only"
+                    label="リスト (Title-Only) "
                     visibilities={visibilities}
                     updateVisibilities={updateVisibilities}
                 />
             </Td>
             <Td>
-                <Flex>
-                    <PositionRadioButtonGroup
-                        name="titleOnly"
-                        values={[['left', '一覧左側'], ['right', '一覧右側']]}
-                        visibilities={visibilities}
-                        positions={positions}
-                        updatePositions={updatePositions}
-                    />
-                    <PositionRadioButtonGroup
-                        name="titleOnly_Meta"
-                        values={[['left', '詳細左側'], ['right', '詳細右側']]}
-                        visibilities={visibilities}
-                        positions={positions}
-                        updatePositions={updatePositions}
-                    />
-                </Flex>
+                <PositionRadioButtonGroup
+                    name="titleOnly"
+                    values={[['left', '左側'], ['right', '右側']]}
+                    visibilities={visibilities}
+                    positions={positions}
+                    updatePositions={updatePositions}
+                />
             </Td>
         </Tr>
         <Tr>
             <Td>
                 <VisibilityCheckbox
                     name="magagine"
-                    label="Magagine"
+                    label="マガジン"
                     visibilities={visibilities}
                     updateVisibilities={updateVisibilities}
                 />
             </Td>
             <Td>
-                <Flex>
-                    <PositionRadioButtonGroup
-                        name="magagine"
-                        values={[['left', '左側'], ['right', '右側'], ['top', '上部'], ['image', '画像上']]}
-                        visibilities={visibilities}
-                        positions={positions}
-                        updatePositions={updatePositions}
-                    />
-                </Flex>
+                <PositionRadioButtonGroup
+                    name="magagine"
+                    values={[['left', '左側'], ['right', '右側'], ['top', '上部'], ['image', '画像上']]}
+                    visibilities={visibilities}
+                    positions={positions}
+                    updatePositions={updatePositions}
+                />
             </Td>
         </Tr>
         <Tr>
             <Td>
                 <VisibilityCheckbox
                     name="cards"
-                    label="Cards"
+                    label="カード"
                     visibilities={visibilities}
                     updateVisibilities={updateVisibilities}
                 />
             </Td>
             <Td>
-                <Flex>
-                    <PositionRadioButtonGroup
-                        name="cards"
-                        values={[['left', '左側'], ['right', '右側']]}
-                        visibilities={visibilities}
-                        positions={positions}
-                        updatePositions={updatePositions}
-                    />
-                </Flex>
+                <PositionRadioButtonGroup
+                    name="cards"
+                    values={[['left', '左側'], ['right', '右側']]}
+                    visibilities={visibilities}
+                    positions={positions}
+                    updatePositions={updatePositions}
+                />
             </Td>
         </Tr>
         <Tr>
             <Td>
                 <VisibilityCheckbox
                     name="article"
-                    label="Article"
+                    label="記事 (詳細) "
                     visibilities={visibilities}
                     updateVisibilities={updateVisibilities}
                 />
             </Td>
             <Td>
-                <Flex>
-                    <PositionRadioButtonGroup
-                        name="article"
-                        values={[['left', '左側'], ['right', '右側']]}
-                        visibilities={visibilities}
-                        positions={positions}
-                        updatePositions={updatePositions}
-                    />
-                </Flex>
+                <PositionRadioButtonGroup
+                    name="article"
+                    values={[['left', '左側'], ['right', '右側']]}
+                    visibilities={visibilities}
+                    positions={positions}
+                    updatePositions={updatePositions}
+                />
             </Td>
         </Tr>
     </Table>;

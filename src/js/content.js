@@ -52,7 +52,31 @@ const insertStyle = async () => {
 
     const { visibilities } = options;
     const visibilitiesStyle = Object.entries(visibilities).map(([name, visible]) => {
-        return visible ? '' : `.${feedly.listEntriesClasses[name]} .fh-badge { display: none; }`;
+        if (visible) {
+            return '';
+        }
+        switch (name) {
+            case 'titleOnly':
+                return `
+                    .${feedly.listEntriesClasses[name]} .content .fh-badge {
+                        display: none;
+                    }
+                `;
+            case 'magagine':
+            case 'cards':
+                    return `
+                    .${feedly.listEntriesClasses[name]} .visual .fh-badge,
+                    .${feedly.listEntriesClasses[name]} .content .fh-badge {
+                        display: none;
+                    }
+                `;
+            case 'article':
+                return `
+                    .entryHeader .metadata .fh-badge {
+                        display: none;
+                    }
+                `;
+        }
     }).join('\n');
 
     const { positions } = options;
@@ -81,28 +105,28 @@ const insertStyle = async () => {
                 `;
         }
     })(positions.titleOnly) : '';
-    const titleOnlyMetaStyle = visibilities.titleOnly ? ((position) => {
-        const listEntriesClass = feedly.listEntriesClasses.titleOnly;
-        switch (position) {
-            case 'left':
-                return `
-                    .${listEntriesClass} .metadata .fh-badge {
-                        margin: 0 8px 0 0;
-                    }
-                `;
-            case 'right':
-                return `
-                    .${listEntriesClass} .entryHeader .metadata {
-                        display: flex;
-                    }
-                    .${listEntriesClass} .metadata .fh-badge {
-                        margin: 0 0 0 8px;
-                        order: 1;
-                    }
-                `;
-        }
-    })(positions.titleOnly_Meta) : '';
-    const magagineStyle = visibilities.magagine ? ((position) => {
+    // const titleOnlyMetaStyle = visibilities.titleOnly ? ((position) => {
+    //     const listEntriesClass = feedly.listEntriesClasses.titleOnly;
+    //     switch (position) {
+    //         case 'left':
+    //             return `
+    //                 .${listEntriesClass} .metadata .fh-badge {
+    //                     margin: 0 8px 0 0;
+    //                 }
+    //             `;
+    //         case 'right':
+    //             return `
+    //                 .${listEntriesClass} .entryHeader .metadata {
+    //                     display: flex;
+    //                 }
+    //                 .${listEntriesClass} .metadata .fh-badge {
+    //                     margin: 0 0 0 8px;
+    //                     order: 1;
+    //                 }
+    //             `;
+    //     }
+    // })(positions.titleOnly_Meta) : '';
+    const magaginePositionStyle = visibilities.magagine ? ((position) => {
         const listEntriesClass = feedly.listEntriesClasses.magagine;
         const contentSelector = `.${listEntriesClass} .entry.u4 .content`;
         const metaBadgeSelector = `${contentSelector} .metadata .fh-badge`;
@@ -153,8 +177,7 @@ const insertStyle = async () => {
         ${defaultStyle}
         ${visibilitiesStyle}
         ${titleOnlyPositionStyle}
-        ${titleOnlyMetaStyle}
-        ${magagineStyle}
+        ${magaginePositionStyle}
     `.split(/\s+/).join(' ').replaceAll(/\s*([{}:;,])\s*/g, '$1').trim();
 
     const style = document.createElement('style');
