@@ -51,10 +51,10 @@ const init = async () => {
         setSynced('seenVersion', currentVersion);
         chrome.runtime.openOptionsPage();
     }
-    chrome.management.get(chrome.runtime.id, ({ installType }) => {
-        if (installType === 'development') {
-            chrome.runtime.openOptionsPage();
-        }
-    });
+    // chrome.management.get(chrome.runtime.id, ({ installType }) => {
+    //     if (installType === 'development') {
+    //         chrome.runtime.openOptionsPage();
+    //     }
+    // });
 };
 init();

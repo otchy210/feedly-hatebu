@@ -27,6 +27,6 @@
         }
     ],
     "web_accessible_resources": [
-        "img/icon128.png"
+        "img/*.png"
     ]
 }

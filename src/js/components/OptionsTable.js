@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { getSynced, setSynced } from '../common';
 import VisibilityCheckbox from './VisibilityCheckbox';
 import PositionRadioButtonGroup from './PositionRadioButtonGroup';
+import { lineGrey } from './colors';
 
 const defaultOptions = {
     visibilities: {
@@ -20,16 +21,24 @@ const defaultOptions = {
 };
 
 const Table = styled.table`
+    border-collapse: collapse;
 `;
 
 const Tr = styled.tr`
+    border-top: 1px solid ${lineGrey};
+    border-bottom: 1px solid ${lineGrey};
+    &:first-child {
+        border-top: none;
+    }
 `;
 
 const Th = styled.th`
     text-align: left;
+    padding: 8px 0;
 `;
 
 const Td = styled.td`
+    padding: 8px 0;
 `;
 
 const OptionsTable = ({ setEdited }) => {
@@ -89,7 +98,7 @@ const OptionsTable = ({ setEdited }) => {
 
     return <Table>
         <Tr>
-            <Th>はてブの表示</Th>
+            <Th colspan={2}>はてブの表示</Th>
         </Tr>
         <Tr>
             <Td>

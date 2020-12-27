@@ -6,7 +6,8 @@ English follows Japanese.
 
 ## 変更履歴
 
-- 2.0.0: () 全面書き換え
+- 2.0.0: (2020-12-27) 全面書き換え
+    - 複数ビューでの表示を追加
     - オプションページの追加
     - 更新情報セクションの追加
     - 表示オプションの追加
@@ -21,7 +22,8 @@ A Google Chrome extension to add Hatena bookmark information into Feedly
 
 ## Change log
 
-- 2.0.0: () Rewrite everything
+- 2.0.0: (2020-12-27) Rewrite everything
+    - Add multi view support
     - Add options page
     - Add release notes section
     - Add visibility options

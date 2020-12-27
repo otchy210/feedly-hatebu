@@ -124,7 +124,7 @@ const insertStyle = async () => {
                         display: flex;
                     }
                     ${metaBadgeSelector} {
-                        margin: 0 0 0　12px;
+                        margin: 0 0 0 12px;
                         order: 1;
                     }
                 `;

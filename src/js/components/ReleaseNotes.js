@@ -13,7 +13,7 @@ const ReleaseNotes = ({handleClick}) => {
     return <Section>
         <SectionTitle>更新情報{handleClick ? <SmallLink onClick={handleClick}>[更新情報をどかす]</SmallLink> : null}</SectionTitle>
         <SectionBody>
-            xxxx年xx月xx日、Ver 2.0.0 がリリースされました！最後の更新から 3 年近く放置されていたエクステンションなので突然の更新に既存ユーザの方々は驚かれたと思いますが、一念発起してやってやりましたよ！<br />
+            2020 年 12 月 27 日、Ver 2.0.0 がリリースされました！最後の更新から 3 年近く放置されていたエクステンションなので突然の更新に既存ユーザの方々は驚かれたと思いますが、一念発起してやってやりましたよ！<br />
             Ver 2.0.0 では全てをゼロから今風に書き直しており、主な変更点は以下のとおりです。<br />
             <ul>
                 <li>
@@ -21,6 +21,12 @@ const ReleaseNotes = ({handleClick}) => {
                     <ul>
                         <li>従来の画像表示よりも最新の情報が表示されるようになりました。</li>
                         <li>API のレスポンスをキャッシュすることで表示自体も高速になりました。</li>
+                    </ul>
+                </li>
+                <li>
+                    リストビュー以外のサポートを追加
+                    <ul>
+                        <li>リストビューの他、マガジンビュー、カードビュー、記事ビューではてブが表示できるようになりました。</li>
                     </ul>
                 </li>
                 <li>
