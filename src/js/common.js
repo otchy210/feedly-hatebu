@@ -1,3 +1,18 @@
+export const defaultOptions = {
+    visibilities: {
+        titleOnly: true,
+        magagine: false,
+        cards: false,
+        article: true
+    },
+    positions: {
+        titleOnly: 'left',
+        magagine: 'left',
+        cards: 'left',
+        article: 'left'
+    },
+};
+
 export const getSynced = (key, defaultValue) => {
     return new Promise(resolve => {
         chrome.storage.sync.get(key, (value) => {

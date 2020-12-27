@@ -1,24 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { getSynced, setSynced } from '../common';
+import { defaultOptions, getSynced, setSynced } from '../common';
 import VisibilityCheckbox from './VisibilityCheckbox';
 import PositionRadioButtonGroup from './PositionRadioButtonGroup';
 import { lineGrey } from './colors';
-
-const defaultOptions = {
-    visibilities: {
-        titleOnly: true,
-        magagine: false,
-        cards: false,
-        article: true
-    },
-    positions: {
-        titleOnly: 'left',
-        magagine: 'left',
-        cards: 'left',
-        article: 'left'
-    },
-};
 
 const Table = styled.table`
     border-collapse: collapse;
@@ -45,7 +30,7 @@ const OptionsTable = ({ setEdited }) => {
     const [options, setOptions] = useState();
 
     useEffect(async () => {
-        const savedOptions = await getSynced('options', {});
+        const savedOptions = await getSynced('options', defaultOptions);
         const currentOptions = {...defaultOptions,
             visibilities: {
                 ...defaultOptions?.visibilities,

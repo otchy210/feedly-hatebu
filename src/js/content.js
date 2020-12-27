@@ -1,4 +1,4 @@
-import { sendMessage, getSynced } from './common';
+import { defaultOptions, sendMessage, getSynced } from './common';
 
 const listEntriesClasses = {
     titleOnly: 'list-entries--layout-u0',
@@ -8,7 +8,7 @@ const listEntriesClasses = {
 };
 
 const insertStyle = async () => {
-    const options = await getSynced('options');
+    const options = await getSynced('options', defaultOptions);
     const defaultStyle = `
     .fh-badge {
         padding: 0 0 1px 0;
