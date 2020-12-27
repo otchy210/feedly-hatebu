@@ -95,7 +95,7 @@ const OptionsTable = ({ setEdited }) => {
             <Td>
                 <VisibilityCheckbox
                     name="titleOnly"
-                    label="リスト (Title-Only) "
+                    label="リスト"
                     visibilities={visibilities}
                     updateVisibilities={updateVisibilities}
                 />

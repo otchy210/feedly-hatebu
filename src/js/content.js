@@ -103,27 +103,6 @@ const insertStyle = async () => {
                 `;
         }
     })(positions.titleOnly) : '';
-    // const titleOnlyMetaStyle = visibilities.titleOnly ? ((position) => {
-    //     const listEntriesClass = listEntriesClasses.titleOnly;
-    //     switch (position) {
-    //         case 'left':
-    //             return `
-    //                 .${listEntriesClass} .metadata .fh-badge {
-    //                     margin: 0 8px 0 0;
-    //                 }
-    //             `;
-    //         case 'right':
-    //             return `
-    //                 .${listEntriesClass} .entryHeader .metadata {
-    //                     display: flex;
-    //                 }
-    //                 .${listEntriesClass} .metadata .fh-badge {
-    //                     margin: 0 0 0 8px;
-    //                     order: 1;
-    //                 }
-    //             `;
-    //     }
-    // })(positions.titleOnly_Meta) : '';
     const magaginePositionStyle = visibilities.magagine ? ((position) => {
         const listEntriesClass = listEntriesClasses.magagine;
         const contentSelector = `.${listEntriesClass} .entry.u4 .content`;
@@ -212,6 +191,26 @@ const insertStyle = async () => {
                 `;
         }
     })(positions.cards) : '';
+    const articlePositionStyle = visibilities.article ? ((position) => {
+        switch (position) {
+            case 'left':
+                return `
+                    .entryHeader .metadata .fh-badge {
+                        margin: 0 8px 0 0;
+                    }
+                `;
+            case 'right':
+                return `
+                    .entryHeader .metadata {
+                        display: flex;
+                    }
+                    .entryHeader .metadata .fh-badge {
+                        margin: 0 0 0 8px;
+                        order: 1;
+                    }
+                `;
+        }
+    })(positions.article) : '';
 
     const styles = `
         ${defaultStyle}
@@ -219,6 +218,7 @@ const insertStyle = async () => {
         ${titleOnlyPositionStyle}
         ${magaginePositionStyle}
         ${cardsPositionStyle}
+        ${articlePositionStyle}
     `.split(/\s+/).join(' ').replaceAll(/\s*([{}:;,])\s*/g, '$1').trim();
 
     const style = document.createElement('style');
