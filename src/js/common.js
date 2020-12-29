@@ -39,3 +39,9 @@ export const sendMessage = (action, payload) => {
         chrome.runtime.sendMessage(chrome.runtime.id, {action, payload}, null, resolve);
     });
 };
+
+export const needsToNotify = (prevVersion, currVersion) => {
+    const [prevMajor, prevMinor] = prevVersion.split('.');
+    const [currMajor, currMinor] = currVersion.split('.');
+    return prevMajor !== currMajor || prevMinor !== currMinor;
+}
