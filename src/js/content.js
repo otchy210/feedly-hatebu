@@ -276,7 +276,7 @@ const getHatebu = async (url) => {
     jsonpCallerScript.setAttribute('async', 'async');
     document.head.appendChild(jsonpCallerScript);
     const jsonpResultScript = document.createElement('script');
-    jsonpResultScript.setAttribute('type', 'text/json');
+    jsonpResultScript.setAttribute('type', 'application/json');
     jsonpResultScript.setAttribute('id', `${jsonpResultIdPrefix}-${url}`);
     document.head.appendChild(jsonpResultScript);
     const result = await awaitResult(url);

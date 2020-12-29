@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled, { createGlobalStyle } from 'styled-components';
-import { getSynced, setSynced } from '../common';
+import { getSynced, setSynced, needsToNotify } from '../common';
 import ReleaseNotes from './ReleaseNotes';
 import Options from './Options';
 import { hatenaBlue, feedlyGreen } from './colors';
@@ -52,7 +52,8 @@ const OptionsPage = () => {
     const currentVersion = chrome.runtime.getManifest().version;
     useEffect(async () => {
         const seenVersion = await getSynced('seenNotesVersion', '');
-        setNotesPos(currentVersion === seenVersion ? 'bottom' : 'top');
+        const putsTop = needsToNotify(seenVersion, currentVersion);
+        setNotesPos(putsTop ? 'top' : 'bottom');
     }, []);
     const handleClick = () => {
         setSynced('seenNotesVersion', currentVersion);

@@ -1,5 +1,5 @@
 import NodeCache from 'node-cache';
-import { getSynced, setSynced } from './common';
+import { getSynced, setSynced, needsToNotify } from './common';
 
 const hatebuCache = new NodeCache({stdTTL: 600, checkperiod: 60});
 
@@ -24,7 +24,7 @@ const cacheHatebu = (payload, callback) => {
 }
 
 // handle messages
-const messageHandler = async (message, sender, callback) => {
+chrome.runtime.onMessage.addListener(async (message, sender, callback) => {
     const {action, payload} = message;
     switch (action) {
         case 'GET_HATEBU_CACHE':
@@ -35,9 +35,7 @@ const messageHandler = async (message, sender, callback) => {
             break;
     }
     return true;
-};
-chrome.runtime.onMessage.addListener(messageHandler);
-chrome.runtime.onMessageExternal.addListener(messageHandler);
+});
 
 // extension icon clicked
 chrome.browserAction.onClicked.addListener(() => {
@@ -47,7 +45,7 @@ chrome.browserAction.onClicked.addListener(() => {
 const init = async () => {
     const currentVersion = chrome.runtime.getManifest().version;
     const seenVersion = await getSynced('seenVersion', '');
-    if (currentVersion !== seenVersion) {
+    if (needsToNotify(seenVersion, currentVersion)) {
         setSynced('seenVersion', currentVersion);
         chrome.runtime.openOptionsPage();
     }
