@@ -1,4 +1,5 @@
 import { defaultOptions, sendMessage, getSynced } from './common';
+import { newApiCall } from './HatenaApi';
 
 const listEntriesClasses = {
     titleOnly: 'list-entries--layout-u0',
@@ -226,71 +227,31 @@ const insertStyle = async () => {
     document.head.appendChild(style);
 };
 
-const jsonpCallbackName = 'feedlyHatebuJsonpCallback';
-const jsonpResultIdPrefix = 'feedlyHatebuResult'
-
-const insertJsonpScript = () => {
-    const jsonpScript = document.createElement('script');
-    jsonpScript.innerHTML = `
-    const ${jsonpCallbackName} = (json) => {
-        if (!json) {
-            return;
-        }
-        const resultScript = document.getElementById(\`${jsonpResultIdPrefix}-\${json.requested_url}\`);
-        resultScript.innerHTML = JSON.stringify(json);
-    };
-    `.split(/\s+/).join(' ').replaceAll(/\s*([{}();=])\s*/g, '$1').trim();;
-    document.head.appendChild(jsonpScript);
-};
-
-const waitFor = (msec) => {
-    return new Promise(resolve => {
-        setTimeout(resolve, msec);
-    });
-}
-
-const awaitResult = async (url) => {
-    const timeout = 1200;
-    let msec = 100;
-    while (true) {
-        await waitFor(msec);
-        const resultNode = document.getElementById(`${jsonpResultIdPrefix}-${url}`);
-        if (resultNode?.innerHTML?.length > 0) {
-            return JSON.parse(resultNode.innerHTML);
-        } else if (msec > timeout) {
-            return false;
-        }
-        msec *= 1.2;
-    }
-};
-
 const getHatebu = async (url) => {
     const chachedHatebu = await sendMessage('GET_HATEBU_CACHE', {url});
     if (chachedHatebu) {
         return chachedHatebu;
     }
-    const encodedUrl = encodeURIComponent(url);
-    const jsonpUrl = `https://b.hatena.ne.jp/entry/jsonlite/?url=${encodedUrl}&callback=${jsonpCallbackName}`;
-    const jsonpCallerScript = document.createElement('script');
-    jsonpCallerScript.setAttribute('src', jsonpUrl);
-    jsonpCallerScript.setAttribute('async', 'async');
-    document.head.appendChild(jsonpCallerScript);
-    const jsonpResultScript = document.createElement('script');
-    jsonpResultScript.setAttribute('type', 'application/json');
-    jsonpResultScript.setAttribute('id', `${jsonpResultIdPrefix}-${url}`);
-    document.head.appendChild(jsonpResultScript);
-    const result = await awaitResult(url);
-    document.head.removeChild(jsonpCallerScript);
-    document.head.removeChild(jsonpResultScript);
-    if (result) {
-        return await sendMessage('CACHE_HATEBU', {result});
-    } else {
-        return await sendMessage('CACHE_HATEBU', {result: {
-            requested_url: url,
-            count: 0,
-            entry_url: ''
-        }});
-    }
+    return newApiCall(url)
+        .then(async (result) => {
+            if (result) {
+                return await sendMessage('CACHE_HATEBU', {result});
+            } else {
+                return await sendMessage('CACHE_HATEBU', {result: {
+                    requested_url: url,
+                    count: 0,
+                    entry_url: ''
+                }});
+            }
+        })
+        .catch(async (err) => {
+            console.error(`[Feedly はてブ] ${err}`);
+            return await sendMessage('CACHE_HATEBU', {result: {
+                requested_url: url,
+                count: 0,
+                entry_url: ''
+            }});
+        });
 };
 
 const createBadge = (hatebu) => {
@@ -380,6 +341,5 @@ const watchDomChange = () => {
 };
 
 // init
-insertJsonpScript();
 insertStyle();
 watchDomChange();

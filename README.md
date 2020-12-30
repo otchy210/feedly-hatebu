@@ -6,6 +6,7 @@ English follows Japanese.
 
 ## 変更履歴
 
+- 2.0.3: (2020-12-30) API コールの効率を向上
 - 2.0.2: (2020-12-29) パッチ修正の通知を停止
 - 2.0.1: (2020-12-27) 初回起動時のバグを修正
 - 2.0.0: (2020-12-27) 全面書き換え
@@ -24,6 +25,7 @@ A Google Chrome extension to add Hatena bookmark information into Feedly
 
 ## Change log
 
+- 2.0.3: (2020-12-30) Make API call more efficient
 - 2.0.2: (2020-12-29) Stop notifying patch fix
 - 2.0.1: (2020-12-27) Fix initial load bug
 - 2.0.0: (2020-12-27) Rewrite everything
