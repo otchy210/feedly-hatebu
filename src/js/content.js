@@ -1,5 +1,6 @@
 import { defaultOptions, sendMessage, getSynced } from './common';
 import { newApiCall } from './HatenaApi';
+import { getBadgeStyle } from './badgeStyle';
 
 const listEntriesClasses = {
     titleOnly: 'list-entries--layout-u0',
@@ -10,46 +11,9 @@ const listEntriesClasses = {
 
 const insertStyle = async () => {
     const options = await getSynced('options', defaultOptions);
-    const defaultStyle = `
-    .fh-badge {
-        padding: 0 0 1px 0;
-        border-bottom-color: #ff0808;
-        height: 15px;
-        background-color: #ffcbcb;
-        font-family: monospace;
-        font-size: 12px;
-        color: #ff0808;
-        text-shadow: 1px 0 #ff0808;
-        line-height: 15px;
-    }
-    .fh-badge.fh-badge-one,
-    .fh-badge.fh-badge-lt10 {
-        border-bottom-color: #ff6565;
-        background-color: #ffeeee;
-        color: #ff6565;
-        text-shadow: 1px 0 #ff6565;
-    }
-    .fh-badge a {
-        border-bottom-style: solid;
-        border-bottom-width: 1px;
-        border-bottom-color: inherit;
-        color: inherit;
-    }
-    .metadata .fh-badge a:hover,
-    .fx .entry .fh-badge a:hover {
-        color: inherit;
-        text-decoration: none;
-    }
-    .fh-badge a::after {
-        content: "users";
-        margin-left: 2px;
-    }
-    .fh-badge.fh-badge-one a::after {
-        content: "user";
-    }
-    `;
+    const { visibilities, selectedDesign } = options;
 
-    const { visibilities } = options;
+    const badgeStyle = getBadgeStyle(selectedDesign);
     const visibilitiesStyle = Object.entries(visibilities).map(([name, visible]) => {
         if (visible) {
             return '';
@@ -214,7 +178,7 @@ const insertStyle = async () => {
     })(positions.article) : '';
 
     const styles = `
-        ${defaultStyle}
+        ${badgeStyle}
         ${visibilitiesStyle}
         ${titleOnlyPositionStyle}
         ${magaginePositionStyle}

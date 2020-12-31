@@ -1,19 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { lineGrey } from './colors';
-
-const Label = styled.label`
-    padding: 8px;
-    border-style: solid;
-    border-width: 1px;
-    border-color: ${props => props.checked ? lineGrey : 'transparent'};
-    border-radius: 4px;
-    opacity: ${props => props.disabled ? '0.5' : '1'};
-    cursor: ${props => props.disabled ? 'default' : 'pointer'};
-`;
-
-const RadioButton = styled.input.attrs({type: 'radio'})`
-`;
+import { RadioButton, RadioButtonLabel } from './common'
 
 const Img = styled.img`
     width: 120px;
@@ -29,10 +16,10 @@ const PositionRadioButton = ({name, value, label, visibilities, positions, updat
     const disabled = !visibilities[name.split('_')[0]];
     const checked = positions[name] === value;
     const imageUrl = chrome.extension.getURL(`img/${name}-${value}.png`);
-    return <Label disabled={disabled} checked={checked}>
+    return <RadioButtonLabel disabled={disabled} checked={checked}>
         <RadioButton disabled={disabled} checked={checked} onChange={() => updatePositions(name, value)}/> {label}<br />
         <Img src={imageUrl} />
-    </Label>;
+    </RadioButtonLabel>;
 };
 
 export default PositionRadioButton;

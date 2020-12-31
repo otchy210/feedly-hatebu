@@ -4,6 +4,8 @@ import { defaultOptions, getSynced, setSynced } from '../common';
 import VisibilityCheckbox from './VisibilityCheckbox';
 import PositionRadioButtonGroup from './PositionRadioButtonGroup';
 import { lineGrey } from './colors';
+import DesignRadioButton from './DesignRadioButton';
+import { designs } from '../badgeStyle';
 
 const Table = styled.table`
     border-collapse: collapse;
@@ -32,6 +34,7 @@ const OptionsTable = ({ setEdited }) => {
     useEffect(async () => {
         const savedOptions = await getSynced('options', defaultOptions);
         const currentOptions = {...defaultOptions,
+            ...savedOptions,
             visibilities: {
                 ...defaultOptions?.visibilities,
                 ...savedOptions?.visibilities
@@ -48,7 +51,7 @@ const OptionsTable = ({ setEdited }) => {
         return null;
     }
 
-    const { visibilities, positions } = options;
+    const { visibilities, positions, selectedDesign } = options;
 
     const setAndSyncOptions = (newOptions) => {
         setOptions(newOptions);
@@ -56,9 +59,10 @@ const OptionsTable = ({ setEdited }) => {
     };
 
     const updateVisibilities = (name, value) => {
-        if (options.visibilities[name] !== value) {
-            setEdited(true);
+        if (options.visibilities[name] === value) {
+            return;
         }
+        setEdited(true);
         const newOptions = {...options,
             visibilities: {
                 ...options?.visibilities,
@@ -69,9 +73,10 @@ const OptionsTable = ({ setEdited }) => {
     };
 
     const updatePositions = (name, value) => {
-        if (options.positions[name] !== value) {
-            setEdited(true);
+        if (options.positions[name] === value) {
+            return;
         }
+        setEdited(true);
         const newOptions = {...options,
             positions: {
                 ...options?.positions,
@@ -81,87 +86,114 @@ const OptionsTable = ({ setEdited }) => {
         setAndSyncOptions(newOptions);
     };
 
-    return <Table>
-        <Tr>
-            <Th colspan={2}>はてブの表示</Th>
-        </Tr>
-        <Tr>
-            <Td>
-                <VisibilityCheckbox
-                    name="titleOnly"
-                    label="リスト"
-                    visibilities={visibilities}
-                    updateVisibilities={updateVisibilities}
-                />
-            </Td>
-            <Td>
-                <PositionRadioButtonGroup
-                    name="titleOnly"
-                    values={[['left', '左側'], ['right', '右側']]}
-                    visibilities={visibilities}
-                    positions={positions}
-                    updatePositions={updatePositions}
-                />
-            </Td>
-        </Tr>
-        <Tr>
-            <Td>
-                <VisibilityCheckbox
-                    name="magagine"
-                    label="マガジン"
-                    visibilities={visibilities}
-                    updateVisibilities={updateVisibilities}
-                />
-            </Td>
-            <Td>
-                <PositionRadioButtonGroup
-                    name="magagine"
-                    values={[['left', '左側'], ['right', '右側'], ['top', '上部'], ['image', '画像上']]}
-                    visibilities={visibilities}
-                    positions={positions}
-                    updatePositions={updatePositions}
-                />
-            </Td>
-        </Tr>
-        <Tr>
-            <Td>
-                <VisibilityCheckbox
-                    name="cards"
-                    label="カード"
-                    visibilities={visibilities}
-                    updateVisibilities={updateVisibilities}
-                />
-            </Td>
-            <Td>
-                <PositionRadioButtonGroup
-                    name="cards"
-                    values={[['left', '左側'], ['right', '右側'], ['image', '画像上']]}
-                    visibilities={visibilities}
-                    positions={positions}
-                    updatePositions={updatePositions}
-                />
-            </Td>
-        </Tr>
-        <Tr>
-            <Td>
-                <VisibilityCheckbox
-                    name="article"
-                    label="記事 (詳細) "
-                    visibilities={visibilities}
-                    updateVisibilities={updateVisibilities}
-                />
-            </Td>
-            <Td>
-                <PositionRadioButtonGroup
-                    name="article"
-                    values={[['left', '左側'], ['right', '右側']]}
-                    visibilities={visibilities}
-                    positions={positions}
-                    updatePositions={updatePositions}
-                />
-            </Td>
-        </Tr>
-    </Table>;
+    const selectDesign = (design) => {
+        if (options.selectedDesign === design) {
+            return;
+        }
+        setEdited(true);
+        const newOptions = {...options,
+            selectedDesign: design
+        };
+        setAndSyncOptions(newOptions);
+    };
+
+    return <>
+        <Table>
+            <Tr>
+                <Th>はてブの表示</Th>
+            </Tr>
+            <Tr>
+                <Td>
+                    <VisibilityCheckbox
+                        name="titleOnly"
+                        label="リスト"
+                        visibilities={visibilities}
+                        updateVisibilities={updateVisibilities}
+                    />
+                </Td>
+                <Td>
+                    <PositionRadioButtonGroup
+                        name="titleOnly"
+                        values={[['left', '左側'], ['right', '右側']]}
+                        visibilities={visibilities}
+                        positions={positions}
+                        updatePositions={updatePositions}
+                    />
+                </Td>
+            </Tr>
+            <Tr>
+                <Td>
+                    <VisibilityCheckbox
+                        name="magagine"
+                        label="マガジン"
+                        visibilities={visibilities}
+                        updateVisibilities={updateVisibilities}
+                    />
+                </Td>
+                <Td>
+                    <PositionRadioButtonGroup
+                        name="magagine"
+                        values={[['left', '左側'], ['right', '右側'], ['top', '上部'], ['image', '画像上']]}
+                        visibilities={visibilities}
+                        positions={positions}
+                        updatePositions={updatePositions}
+                    />
+                </Td>
+            </Tr>
+            <Tr>
+                <Td>
+                    <VisibilityCheckbox
+                        name="cards"
+                        label="カード"
+                        visibilities={visibilities}
+                        updateVisibilities={updateVisibilities}
+                    />
+                </Td>
+                <Td>
+                    <PositionRadioButtonGroup
+                        name="cards"
+                        values={[['left', '左側'], ['right', '右側'], ['image', '画像上']]}
+                        visibilities={visibilities}
+                        positions={positions}
+                        updatePositions={updatePositions}
+                    />
+                </Td>
+            </Tr>
+            <Tr>
+                <Td>
+                    <VisibilityCheckbox
+                        name="article"
+                        label="記事 (詳細) "
+                        visibilities={visibilities}
+                        updateVisibilities={updateVisibilities}
+                    />
+                </Td>
+                <Td>
+                    <PositionRadioButtonGroup
+                        name="article"
+                        values={[['left', '左側'], ['right', '右側']]}
+                        visibilities={visibilities}
+                        positions={positions}
+                        updatePositions={updatePositions}
+                    />
+                </Td>
+            </Tr>
+        </Table>
+        <Table>
+            <Tr>
+                <Th>はてブのデザイン</Th>
+            </Tr>
+            <Tr>
+                <Td>
+                    {designs.map(design => <DesignRadioButton
+                        design={design}
+                        selectedDesign={selectedDesign}
+                        selectDesign={selectDesign}
+                    />)}
+                </Td>
+            </Tr>
+        </Table>
+    </>;
 };
 
 export default OptionsTable;

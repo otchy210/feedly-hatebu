@@ -4,6 +4,7 @@ import { getSynced, setSynced, needsToNotify } from '../common';
 import ReleaseNotes from './ReleaseNotes';
 import Options from './Options';
 import { hatenaBlue, feedlyGreen } from './colors';
+import { designs, getBadgeStyle } from '../badgeStyle';
 
 const GlobalStyle = createGlobalStyle`
     body {
@@ -14,6 +15,7 @@ const GlobalStyle = createGlobalStyle`
         box-sizing: border-box;
         color: #333;
     }
+${designs.map(design => getBadgeStyle(design, true)).join('\n')}
 `;
 
 const PageWrapper = styled.div`
