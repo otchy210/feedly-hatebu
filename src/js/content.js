@@ -97,10 +97,12 @@ const insertStyle = async () => {
                 return `
                     ${[metaBadgeSelector, imageBadgeSelector].join(',')} { display: none; }
                     ${contentSelector} .title {
-                        margin-top: 16px;
+                        display: block;
+                        clear: left;
+                        padding-top: 2px;
                     }
                     ${topBadgeSelector} {
-                        position: absolute;
+                        float: left;
                     }
                 `;
             case 'image':
@@ -228,6 +230,10 @@ const createBadge = (hatebu) => {
     link.addEventListener('click', e => e.stopPropagation());
     badge.appendChild(link);
     badge.classList.add('fh-badge');
+    badge.addEventListener('click', e => {
+        e.stopPropagation();
+        window.open(e.target.firstChild.href, '_blank');
+    });
     if (count === 1) {
         badge.classList.add('fh-badge-one');
     } else if (count < 10) {
