@@ -101,6 +101,20 @@ const OptionsTable = ({ setEdited }) => {
     return <>
         <Table>
             <Tr>
+                <Th>はてブのデザイン</Th>
+            </Tr>
+            <Tr>
+                <Td>
+                    {designs.map(design => <DesignRadioButton
+                        design={design}
+                        selectedDesign={selectedDesign}
+                        selectDesign={selectDesign}
+                    />)}
+                </Td>
+            </Tr>
+        </Table>
+        <Table>
+            <Tr>
                 <Th>はてブの表示</Th>
             </Tr>
             <Tr>
@@ -177,20 +191,6 @@ const OptionsTable = ({ setEdited }) => {
                         positions={positions}
                         updatePositions={updatePositions}
                     />
-                </Td>
-            </Tr>
-        </Table>
-        <Table>
-            <Tr>
-                <Th>はてブのデザイン</Th>
-            </Tr>
-            <Tr>
-                <Td>
-                    {designs.map(design => <DesignRadioButton
-                        design={design}
-                        selectedDesign={selectedDesign}
-                        selectDesign={selectDesign}
-                    />)}
                 </Td>
             </Tr>
         </Table>
