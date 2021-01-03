@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import { hatenaBlue, feedlyGreen, alertRed } from './colors';
+import { hatenaBlue, feedlyGreen, alertRed, lineGrey } from './colors';
 
 export const Section = styled.section`
 `;
@@ -42,3 +42,16 @@ export const Link = styled.a.attrs({target: '_blank'})`
     color: #00c;
 `;
 
+export const RadioButton = styled.input.attrs({type: 'radio'})`
+`;
+
+export const RadioButtonLabel = styled.label`
+    display: inline-block;
+    padding: 8px;
+    border-style: solid;
+    border-width: 1px;
+    border-color: ${props => props.checked ? lineGrey : 'transparent'};
+    border-radius: 4px;
+    opacity: ${props => props.disabled ? '0.5' : '1'};
+    cursor: ${props => props.disabled ? 'default' : 'pointer'};
+`;

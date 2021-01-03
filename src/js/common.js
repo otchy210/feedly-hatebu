@@ -11,6 +11,7 @@ export const defaultOptions = {
         cards: 'left',
         article: 'left'
     },
+    selectedDesign: 'legacy'
 };
 
 export const getSynced = (key, defaultValue) => {

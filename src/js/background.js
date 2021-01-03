@@ -1,7 +1,9 @@
 import NodeCache from 'node-cache';
 import { getSynced, setSynced, needsToNotify } from './common';
 
-const hatebuCache = new NodeCache({stdTTL: 600, checkperiod: 60});
+const ONE_HOUR = 60 * 60;
+const FIVE_MINUTES = 60 * 5;
+const hatebuCache = new NodeCache({stdTTL: ONE_HOUR, checkperiod: FIVE_MINUTES});
 
 const getHatebuCache = (payload, callback) => {
     const { url } = payload;

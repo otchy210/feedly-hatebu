@@ -13,8 +13,15 @@ const ReleaseNotes = ({handleClick}) => {
     return <Section>
         <SectionTitle>更新情報{handleClick ? <SmallLink onClick={handleClick}>[更新情報をどかす]</SmallLink> : null}</SectionTitle>
         <SectionBody>
-            Ver 2.0.3 [2020-12-30]<br />
-            はてなブックマーク API の呼び出しを効率化して、より高速に動作するようになりました。
+            Ver 2.1.0 [2021-01-03]<br />
+            はてなブックマークのデザインを選択できるようになりました。従来は <span class="legacy"><span class="fh-badge"><a>123</a></span></span> しかありませんでしたが、<span class="button"><span class="fh-badge"><a>123</a></span></span> や <span class="feedly"><span class="fh-badge"><a>123</a></span></span> などが選べるようになりました。<br />
+            この更新までで Ver.2 リリース当時にやりたいと思っていたことは一通り完了したので、何か新しいアイディアが無ければ以降はバグフィックスが中心となります。小さなものでも構わないので、もし何か改善や機能追加のアイディアがあれば Twitter (<Link href="https://twitter.com/otchy">@otchy</Link>) 経由でご連絡頂ければ検討したいと思います！
+        </SectionBody>
+        <SectionBody>
+            <details>
+                <summary>Ver 2.0.3 [2020-12-30]</summary>
+                はてなブックマーク API の呼び出しを効率化して、より高速に動作するようになりました。
+            </details>
         </SectionBody>
         <SectionBody>
             <details>
