@@ -242,6 +242,12 @@ const createBadge = (hatebu) => {
     return badge;
 };
 
+const getEntryUrl = (entry) => {
+    const entryTitle = entry.querySelector('.entry__title');
+    const url = entryTitle.getAttribute('href');
+    return url;
+}
+
 const getHabetuBadge = async (url) => {
     const hatebu = await getHatebu(url);
     if (hatebu?.count > 0) {
@@ -252,7 +258,7 @@ const getHabetuBadge = async (url) => {
 };
 
 const handleEntry = async (entry) => {
-    const url = entry.getAttribute('data-alternate-link');
+    const url = getEntryUrl(entry);
     const badge = await getHabetuBadge(url);
     if (!badge) {
         return;
@@ -274,7 +280,7 @@ const handleEntry = async (entry) => {
 };
 
 const handleU100Entry = async (entry) => {
-    const url = entry.getAttribute('data-alternate-link');
+    const url = getEntryUrl(entry);
     const badge = await getHabetuBadge(url);
     if (!badge) {
         return;
