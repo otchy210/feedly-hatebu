@@ -27,6 +27,7 @@ A Google Chrome extension to add Hatena bookmark information into Feedly
 
 ## Change log
 
+-   2.1.1: (2022-10-27) Fix a bug happening due to changes on Feedly side
 -   2.1.0: (2021-01-03) Add badge design options
 -   2.0.3: (2020-12-30) Make API call more efficient
 -   2.0.2: (2020-12-29) Stop notifying patch fix
