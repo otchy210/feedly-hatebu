@@ -1,30 +1,30 @@
 {
-  "name": "feedly-hatebu",
-  "version": "2.1.0",
-  "description": "はてなブックマークの情報を Feedly 上に表示します。",
-  "scripts": {
-    "build": "node bin/build.mjs && webpack",
-    "watch": "node bin/build.mjs && webpack --watch",
-    "dist": "npm run build && node bin/dist.mjs"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/otchy210/feedly-hatebu.git"
-  },
-  "license": "MIT",
-  "homepage": "https://github.com/otchy210/feedly-hatebu#readme",
-  "devDependencies": {
-    "@babel/core": "^7.12.10",
-    "@babel/plugin-proposal-optional-chaining": "^7.12.7",
-    "@babel/preset-react": "^7.12.10",
-    "babel-loader": "^8.2.2",
-    "react": "^17.0.1",
-    "react-dom": "^17.0.1",
-    "webpack": "^5.10.3",
-    "webpack-cli": "^4.2.0"
-  },
-  "dependencies": {
-    "node-cache": "^5.1.2",
-    "styled-components": "^5.2.1"
-  }
+    "name": "feedly-hatebu",
+    "version": "2.1.1",
+    "description": "はてなブックマークの情報を Feedly 上に表示します。",
+    "scripts": {
+        "build": "node bin/build.mjs && webpack",
+        "watch": "node bin/build.mjs && webpack --watch",
+        "dist": "npm run build && node bin/dist.mjs"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/otchy210/feedly-hatebu.git"
+    },
+    "license": "MIT",
+    "homepage": "https://github.com/otchy210/feedly-hatebu#readme",
+    "devDependencies": {
+        "@babel/core": "^7.12.10",
+        "@babel/plugin-proposal-optional-chaining": "^7.12.7",
+        "@babel/preset-react": "^7.12.10",
+        "babel-loader": "^8.2.2",
+        "react": "^17.0.1",
+        "react-dom": "^17.0.1",
+        "webpack": "^5.10.3",
+        "webpack-cli": "^4.2.0"
+    },
+    "dependencies": {
+        "node-cache": "^5.1.2",
+        "styled-components": "^5.2.1"
+    }
 }
