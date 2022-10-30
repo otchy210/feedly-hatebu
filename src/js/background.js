@@ -40,7 +40,7 @@ chrome.runtime.onMessage.addListener(async (message, sender, callback) => {
 });
 
 // extension icon clicked
-chrome.browserAction.onClicked.addListener(() => {
+chrome.action.onClicked.addListener(() => {
     chrome.runtime.openOptionsPage();
 });
 
