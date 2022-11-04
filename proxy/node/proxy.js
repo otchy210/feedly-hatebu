@@ -59,3 +59,4 @@ const server = http.createServer((req, res) => {
     });
 });
 server.listen(8102);
+console.log('Proxy server is running on "http://localhost:8102"');
