@@ -1,6 +1,6 @@
 {
     "name": "feedly-hatebu",
-    "version": "2.1.1",
+    "version": "3.0.0b",
     "description": "はてなブックマークの情報を Feedly 上に表示します。",
     "scripts": {
         "build": "node bin/build.mjs && webpack",
