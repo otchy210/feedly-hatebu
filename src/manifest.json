@@ -1,21 +1,19 @@
 {
     "name": "Feedly はてブ",
     "version": "${version}",
-    "manifest_version": 2,
+    "manifest_version": 3,
     "description": "${description}",
     "icons": {
         "16": "img/icon16.png",
         "48": "img/icon48.png",
         "128": "img/icon128.png"
     },
-    "permissions": [
-        "storage"
-    ],
+    "permissions": ["storage"],
     "background": {
-        "scripts": ["js/background.js"],
-        "persistent": false
+        "service_worker": "js/background.js",
+        "type": "module"
     },
-    "browser_action": {
+    "action": {
         "default_title": "Feedly はてブのオプションを開く"
     },
     "options_page": "options.html",
@@ -26,6 +24,9 @@
         }
     ],
     "web_accessible_resources": [
-        "img/*.png"
+        {
+            "resources": ["img/*.png"],
+            "matches": ["<all_urls>"]
+        }
     ]
 }

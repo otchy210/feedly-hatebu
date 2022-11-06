@@ -194,6 +194,10 @@ const insertStyle = async () => {
 };
 
 const getHatebu = async (url) => {
+    const hatebu = await sendMessage('GET_HATEBU', {url});
+    if (hatebu) {
+        return hatebu;
+    }
     const chachedHatebu = await sendMessage('GET_HATEBU_CACHE', {url});
     if (chachedHatebu) {
         return chachedHatebu;

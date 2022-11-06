@@ -32,7 +32,7 @@ const PageWrapper = styled.div`
 const PageTitle = styled.h1`
     margin: 0;
     padding-left: 60px;
-    background-image: url(${chrome.extension.getURL('img/icon128.png')});
+    background-image: url(${chrome.runtime.getURL('img/icon128.png')});
     background-size: 48px;
     background-position: left center;
     background-repeat: no-repeat;

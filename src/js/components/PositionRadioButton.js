@@ -15,7 +15,7 @@ const Img = styled.img`
 const PositionRadioButton = ({name, value, label, visibilities, positions, updatePositions}) => {
     const disabled = !visibilities[name.split('_')[0]];
     const checked = positions[name] === value;
-    const imageUrl = chrome.extension.getURL(`img/${name}-${value}.png`);
+    const imageUrl = chrome.runtime.getURL(`img/${name}-${value}.png`);
     return <RadioButtonLabel disabled={disabled} checked={checked}>
         <RadioButton disabled={disabled} checked={checked} onChange={() => updatePositions(name, value)}/> {label}<br />
         <Img src={imageUrl} />

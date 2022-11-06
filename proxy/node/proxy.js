@@ -50,7 +50,7 @@ const server = http.createServer((req, res) => {
             data += chunk;
         });
         resp.on('end', () => {
-            res.writeHead(200, {'Content-Type': 'application/json'});
+            res.writeHead(200, {'Content-Type': 'application/json', 'Access-Control-Allow-Origin': '*'});
             res.end(data);
         }); 
     }).on('error', (err) => {
