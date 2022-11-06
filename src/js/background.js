@@ -25,6 +25,25 @@ const cacheHatebu = (payload, callback) => {
     callback(hatebu);
 }
 
+const getHatebu = async (payload, callback) => {
+    const { url } = payload;
+    if (hatebuCache.has(url)) {
+        callback(hatebuCache.get(url));
+        return;
+    }
+    const response = await fetch(`http://localhost:8102?url=${encodeURI(url)}`);
+    const result = await response.json();
+    const hatebu = result ? {
+        count: result.count,
+        entry: result.entry_url,
+    } : {
+        count: 0,
+        entry: url
+    };
+    hatebuCache.set(url, hatebu);
+    callback(hatebu);
+}
+
 // handle messages
 chrome.runtime.onMessage.addListener(async (message, sender, callback) => {
     const {action, payload} = message;
@@ -34,6 +53,9 @@ chrome.runtime.onMessage.addListener(async (message, sender, callback) => {
             break;
         case 'CACHE_HATEBU':
             cacheHatebu(payload, callback);
+            break;
+        case 'GET_HATEBU':
+            getHatebu(payload, callback);
             break;
     }
     return true;
