@@ -5,26 +5,6 @@ const ONE_HOUR = 60 * 60;
 const FIVE_MINUTES = 60 * 5;
 const hatebuCache = new NodeCache({stdTTL: ONE_HOUR, checkperiod: FIVE_MINUTES});
 
-const getHatebuCache = (payload, callback) => {
-    const { url } = payload;
-    if (hatebuCache.has(url)) {
-        callback(hatebuCache.get(url));
-    } else {
-        callback(false);
-    }
-};
-
-const cacheHatebu = (payload, callback) => {
-    const { result } = payload;
-    const url = result.requested_url;
-    const hatebu = {
-        count: result.count,
-        entry: result.entry_url,
-    };
-    hatebuCache.set(url, hatebu);
-    callback(hatebu);
-}
-
 const getHatebu = async (payload, callback) => {
     const { url } = payload;
     if (hatebuCache.has(url)) {
@@ -45,15 +25,9 @@ const getHatebu = async (payload, callback) => {
 }
 
 // handle messages
-chrome.runtime.onMessage.addListener(async (message, sender, callback) => {
+chrome.runtime.onMessage.addListener((message, sender, callback) => {
     const {action, payload} = message;
     switch (action) {
-        case 'GET_HATEBU_CACHE':
-            getHatebuCache(payload, callback);
-            break;
-        case 'CACHE_HATEBU':
-            cacheHatebu(payload, callback);
-            break;
         case 'GET_HATEBU':
             getHatebu(payload, callback);
             break;

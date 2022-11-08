@@ -1,5 +1,4 @@
 import { defaultOptions, sendMessage, getSynced } from './common';
-import { newApiCall } from './HatenaApi';
 import { getBadgeStyle } from './badgeStyle';
 
 const listEntriesClasses = {
@@ -193,37 +192,6 @@ const insertStyle = async () => {
     document.head.appendChild(style);
 };
 
-const getHatebu = async (url) => {
-    const hatebu = await sendMessage('GET_HATEBU', {url});
-    if (hatebu) {
-        return hatebu;
-    }
-    const chachedHatebu = await sendMessage('GET_HATEBU_CACHE', {url});
-    if (chachedHatebu) {
-        return chachedHatebu;
-    }
-    return newApiCall(url)
-        .then(async (result) => {
-            if (result) {
-                return await sendMessage('CACHE_HATEBU', {result});
-            } else {
-                return await sendMessage('CACHE_HATEBU', {result: {
-                    requested_url: url,
-                    count: 0,
-                    entry_url: ''
-                }});
-            }
-        })
-        .catch(async (err) => {
-            console.error(`[Feedly はてブ] ${err}`);
-            return await sendMessage('CACHE_HATEBU', {result: {
-                requested_url: url,
-                count: 0,
-                entry_url: ''
-            }});
-        });
-};
-
 const createBadge = (hatebu) => {
     const {count, entry} = hatebu;
     const badge = document.createElement('span');
@@ -253,7 +221,7 @@ const getEntryUrl = (entry) => {
 }
 
 const getHabetuBadge = async (url) => {
-    const hatebu = await getHatebu(url);
+    const hatebu = await sendMessage('GET_HATEBU', { url });
     if (hatebu?.count > 0) {
         return createBadge(hatebu);
     } else {
