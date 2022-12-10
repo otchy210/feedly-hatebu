@@ -214,8 +214,8 @@ const createBadge = (hatebu) => {
     return badge;
 };
 
-const getEntryUrl = (entry) => {
-    const entryTitle = entry.querySelector('.entry__title');
+const getEntryUrl = (headerClass, entry) => {
+    const entryTitle = entry.querySelector(`.${headerClass} > a:first-child`);
     const url = entryTitle.getAttribute('href');
     return url;
 }
@@ -230,7 +230,7 @@ const getHabetuBadge = async (url) => {
 };
 
 const handleEntry = async (entry) => {
-    const url = getEntryUrl(entry);
+    const url = getEntryUrl('content', entry);
     const badge = await getHabetuBadge(url);
     if (!badge) {
         return;
@@ -252,7 +252,7 @@ const handleEntry = async (entry) => {
 };
 
 const handleU100Entry = async (entry) => {
-    const url = getEntryUrl(entry);
+    const url = getEntryUrl('entryHeader', entry);
     const badge = await getHabetuBadge(url);
     if (!badge) {
         return;
