@@ -174,16 +174,16 @@ const insertStyle = async () => {
         switch (position) {
             case 'left':
                 return `
-                    .entryHeader .metadata .fh-badge {
+                    .entryHeader .EntryMetadata .fh-badge {
                         margin: 0 8px 0 0;
                     }
                 `;
             case 'right':
                 return `
-                    .entryHeader .metadata {
+                    .entryHeader .EntryMetadata {
                         display: flex;
                     }
-                    .entryHeader .metadata .fh-badge {
+                    .entryHeader .EntryMetadata .fh-badge {
                         margin: 0 0 0 8px;
                         order: 1;
                     }
