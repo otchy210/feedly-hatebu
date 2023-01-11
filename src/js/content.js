@@ -257,25 +257,51 @@ const getHabetuBadge = async (url) => {
     }
 };
 
-const handleEntry = async (entry) => {
-    const url = getEntryUrl('content', entry);
+const handleTitleOnlyEntry = async (entry) => {
+    const url = getEntryUrl('TitleOnlyEntry__content', entry);
     const badge = await getHabetuBadge(url);
     if (!badge) {
         return;
     }
-    const content = entry.querySelector('.content');
+    const content = entry.querySelector('.TitleOnlyEntry__content');
     content.insertBefore(badge, content.firstChild);
+}
 
-    const metadata = content.querySelector('.metadata');
-    if (metadata) {
-        const metadataBadge = await getHabetuBadge(url);
-        metadata.insertBefore(metadataBadge, metadata.firstChild);
+const handleMagazineEntry = async (entry) => {
+    const url = getEntryUrl('MagazineEntry__content', entry);
+    const badge = await getHabetuBadge(url);
+    if (!badge) {
+        return;
     }
+    const metadata = entry.querySelector('.EntryMetadata');
+    metadata.insertBefore(badge, metadata.firstChild);
 
-    const visual = entry.querySelector('.visual');
-    if (visual) {
-        const visualBadge = await getHabetuBadge(url);
-        visual.appendChild(visualBadge);
+    const visual = entry.querySelector('.MagazineEntry__visual');
+    const visualBadge = await getHabetuBadge(url);
+    visual.appendChild(visualBadge);
+}
+
+const handleCardEntry = async (entry) => {
+    const url = getEntryUrl('CardEntry__content', entry);
+    const badge = await getHabetuBadge(url);
+    if (!badge) {
+        return;
+    }
+    const metadata = entry.querySelector('.EntryMetadata');
+    metadata.insertBefore(badge, metadata.firstChild);
+
+    const visual = entry.querySelector('.CardEntry__visual-container');
+    const visualBadge = await getHabetuBadge(url);
+    visual.appendChild(visualBadge);
+}
+
+const handleEntry = async (entry) => {
+    if (entry.classList.contains('TitleOnlyEntry')) {
+        handleTitleOnlyEntry(entry);
+    } else if (entry.classList.contains('MagazineEntry')) {
+        handleMagazineEntry(entry);
+    } else if (entry.classList.contains('CardEntry')) {
+        handleCardEntry(entry);
     }
 };
 
@@ -285,7 +311,7 @@ const handleU100Entry = async (entry) => {
     if (!badge) {
         return;
     }
-    const metadata = entry.querySelector('.metadata.EntryMetadata');
+    const metadata = entry.querySelector('.EntryMetadata');
     metadata.insertBefore(badge, metadata.firstChild);
 };
 
