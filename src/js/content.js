@@ -1,13 +1,6 @@
 import { defaultOptions, sendMessage, getSynced } from './common';
 import { getBadgeStyle } from './badgeStyle';
 
-const listEntriesClasses = {
-    titleOnly: 'list-entries--layout-u0',
-    magagine: 'list-entries--layout-u4',
-    cards: 'list-entries--layout-u5',
-    article: 'list-entries--layout-u100'
-};
-
 const insertStyle = async () => {
     const options = await getSynced('options', defaultOptions);
     const { visibilities, selectedDesign } = options;
