@@ -74,11 +74,13 @@ const insertStyle = async () => {
         }
     })(positions.titleOnly) : '';
     const magaginePositionStyle = visibilities.magagine ? ((position) => {
-        const listEntriesClass = listEntriesClasses.magagine;
-        const contentSelector = `.${listEntriesClass} .entry.u4 .content`;
-        const metaBadgeSelector = `${contentSelector} .metadata .fh-badge`;
+        const entrySelector = '.list-entries .MagazineEntry';
+        const contentSelector = `${entrySelector} .MagazineEntry__content`;
+        const metadataSelector = `${contentSelector} .EntryMetadata`;
+        const metaBadgeSelector = `${metadataSelector} .fh-badge`;
         const topBadgeSelector = `${contentSelector} > .fh-badge`;
-        const imageBadgeSelector = `.${listEntriesClass} .entry.u4 .visual .fh-badge`;
+        const imageContainerSelector = `${entrySelector} .MagazineEntry__visual`;
+        const imageBadgeSelector = `${imageContainerSelector} .fh-badge`;
         switch (position) {
             case 'left':
                 return `
@@ -90,7 +92,7 @@ const insertStyle = async () => {
             case 'right':
                 return `
                     ${[topBadgeSelector, imageBadgeSelector].join(',')} { display: none; }
-                    ${contentSelector} .metadata {
+                    ${metadataSelector} {
                         display: flex;
                     }
                     ${metaBadgeSelector} {
@@ -101,7 +103,7 @@ const insertStyle = async () => {
             case 'top':
                 return `
                     ${[metaBadgeSelector, imageBadgeSelector].join(',')} { display: none; }
-                    ${contentSelector} .title {
+                    ${contentSelector} .EntryTitle {
                         display: block;
                         clear: left;
                         padding-top: 2px;
@@ -113,6 +115,9 @@ const insertStyle = async () => {
             case 'image':
                 return `
                     ${[metaBadgeSelector, topBadgeSelector].join(',')} { display: none; }
+                    ${imageContainerSelector} {
+                        position: relative;
+                    }
                     ${imageBadgeSelector} {
                         position: absolute;
                         top: 1px;
@@ -278,8 +283,12 @@ const handleMagazineEntry = async (entry) => {
     if (!badge) {
         return;
     }
+    const content = entry.querySelector('.MagazineEntry__content');
+    content.insertBefore(badge, content.firstChild);
+
     const metadata = entry.querySelector('.EntryMetadata');
-    metadata.insertBefore(badge, metadata.firstChild);
+    const metadataBadge = await getHabetuBadge(url);
+    metadata.insertBefore(metadataBadge, metadata.firstChild);
 
     const visual = entry.querySelector('.MagazineEntry__visual');
     const visualBadge = await getHabetuBadge(url);
