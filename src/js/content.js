@@ -130,11 +130,13 @@ const insertStyle = async () => {
         }
     })(positions.magagine) : '';
     const cardsPositionStyle = visibilities.cards ? ((position) => {
-        const listEntriesClass = listEntriesClasses.cards;
-        const contentSelector = `.${listEntriesClass} .entry.u5 .content`;
-        const metaBadgeSelector = `${contentSelector} .metadata .fh-badge`;
+        const entrySelector = '.list-entries .CardEntry';
+        const contentSelector = `${entrySelector} .CardEntry__content`;
+        const metadataSelector = `${contentSelector} .EntryMetadata`;
+        const metaBadgeSelector = `${metadataSelector} .fh-badge`;
         const topBadgeSelector = `${contentSelector} > .fh-badge`;
-        const imageBadgeSelector = `.${listEntriesClass} .entry.u5 .visual .fh-badge`;
+        const imageContainerSelector = `${entrySelector} .CardEntry__visual-container`;
+        const imageBadgeSelector = `${imageContainerSelector} .fh-badge`;
         switch (position) {
             case 'left':
                 return `
@@ -146,11 +148,11 @@ const insertStyle = async () => {
             case 'right':
                 return `
                     ${[topBadgeSelector, imageBadgeSelector].join(',')} { display: none; }
-                    ${contentSelector} .metadata {
+                    ${metadataSelector} {
                         display: flex;
                     }
                     ${metaBadgeSelector} {
-                        margin: 0 0 0　12px;
+                        margin: 0 0 0 12px;
                         order: 1;
                     }
                 `;
@@ -301,8 +303,12 @@ const handleCardEntry = async (entry) => {
     if (!badge) {
         return;
     }
+    const content = entry.querySelector('.CardEntry__content');
+    content.insertBefore(badge, content.firstChild);
+
     const metadata = entry.querySelector('.EntryMetadata');
-    metadata.insertBefore(badge, metadata.firstChild);
+    const metadataBadge = await getHabetuBadge(url);
+    metadata.insertBefore(metadataBadge, metadata.firstChild);
 
     const visual = entry.querySelector('.CardEntry__visual-container');
     const visualBadge = await getHabetuBadge(url);
