@@ -21,21 +21,27 @@ const insertStyle = async () => {
         switch (name) {
             case 'titleOnly':
                 return `
-                    .${listEntriesClasses[name]} .content .fh-badge {
+                    .list-entries .TitleOnlyEntry__content .fh-badge {
                         display: none;
                     }
                 `;
             case 'magagine':
+                    return `
+                    .list-entries .MagazineEntry__visual .fh-badge,
+                    .list-entries .MagazineEntry__content .fh-badge {
+                        display: none;
+                    }
+                `;
             case 'cards':
                     return `
-                    .${listEntriesClasses[name]} .visual .fh-badge,
-                    .${listEntriesClasses[name]} .content .fh-badge {
+                    .list-entries .CardEntry__visual-container .fh-badge,
+                    .list-entries .CardEntry__content .fh-badge {
                         display: none;
                     }
                 `;
             case 'article':
                 return `
-                    .entryHeader .metadata .fh-badge {
+                    .entryHeader .EntryMetadata .fh-badge {
                         display: none;
                     }
                 `;
