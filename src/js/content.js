@@ -50,25 +50,24 @@ const insertStyle = async () => {
 
     const { positions } = options;
     const titleOnlyPositionStyle = visibilities.titleOnly ? ((position) => {
-        const listEntriesClass = listEntriesClasses.titleOnly;
         switch (position) {
             case 'left':
                 return `
-                    .${listEntriesClass} .content .fh-badge {
+                    .list-entries .TitleOnlyEntry__content .fh-badge {
                         margin: 0 4px 0 0;
                     }
                 `;
             case 'right':
                 return `
-                    .${listEntriesClass} .entry.u0 .content {
+                    .list-entries .TitleOnlyEntry__content {
                         position: relative;
                     }
-                    .${listEntriesClass} .content .fh-badge {
+                    .list-entries .TitleOnlyEntry__content .fh-badge {
                         position: absolute;
                         right: 0;
                         box-shadow: -4px 0 0 #fff;
                     }
-                    .${listEntriesClass} .entry.u0:hover .content .fh-badge {
+                    .list-entries .TitleOnlyEntry:hover .TitleOnlyEntry__content .fh-badge {
                         display: none;
                     }
                 `;
