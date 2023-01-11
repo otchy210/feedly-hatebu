@@ -20,21 +20,27 @@ const insertStyle = async () => {
         switch (name) {
             case 'titleOnly':
                 return `
-                    .${listEntriesClasses[name]} .content .fh-badge {
+                    .list-entries .TitleOnlyEntry__content .fh-badge {
                         display: none;
                     }
                 `;
             case 'magagine':
+                    return `
+                    .list-entries .MagazineEntry__visual .fh-badge,
+                    .list-entries .MagazineEntry__content .fh-badge {
+                        display: none;
+                    }
+                `;
             case 'cards':
                     return `
-                    .${listEntriesClasses[name]} .visual .fh-badge,
-                    .${listEntriesClasses[name]} .content .fh-badge {
+                    .list-entries .CardEntry__visual-container .fh-badge,
+                    .list-entries .CardEntry__content .fh-badge {
                         display: none;
                     }
                 `;
             case 'article':
                 return `
-                    .entryHeader .metadata .fh-badge {
+                    .entryHeader .EntryMetadata .fh-badge {
                         display: none;
                     }
                 `;
@@ -43,36 +49,37 @@ const insertStyle = async () => {
 
     const { positions } = options;
     const titleOnlyPositionStyle = visibilities.titleOnly ? ((position) => {
-        const listEntriesClass = listEntriesClasses.titleOnly;
         switch (position) {
             case 'left':
                 return `
-                    .${listEntriesClass} .content .fh-badge {
+                    .list-entries .TitleOnlyEntry__content .fh-badge {
                         margin: 0 4px 0 0;
                     }
                 `;
             case 'right':
                 return `
-                    .${listEntriesClass} .entry.u0 .content {
+                    .list-entries .TitleOnlyEntry__content {
                         position: relative;
                     }
-                    .${listEntriesClass} .content .fh-badge {
+                    .list-entries .TitleOnlyEntry__content .fh-badge {
                         position: absolute;
                         right: 0;
                         box-shadow: -4px 0 0 #fff;
                     }
-                    .${listEntriesClass} .entry.u0:hover .content .fh-badge {
+                    .list-entries .TitleOnlyEntry:hover .TitleOnlyEntry__content .fh-badge {
                         display: none;
                     }
                 `;
         }
     })(positions.titleOnly) : '';
     const magaginePositionStyle = visibilities.magagine ? ((position) => {
-        const listEntriesClass = listEntriesClasses.magagine;
-        const contentSelector = `.${listEntriesClass} .entry.u4 .content`;
-        const metaBadgeSelector = `${contentSelector} .metadata .fh-badge`;
+        const entrySelector = '.list-entries .MagazineEntry';
+        const contentSelector = `${entrySelector} .MagazineEntry__content`;
+        const metadataSelector = `${contentSelector} .EntryMetadata`;
+        const metaBadgeSelector = `${metadataSelector} .fh-badge`;
         const topBadgeSelector = `${contentSelector} > .fh-badge`;
-        const imageBadgeSelector = `.${listEntriesClass} .entry.u4 .visual .fh-badge`;
+        const imageContainerSelector = `${entrySelector} .MagazineEntry__visual`;
+        const imageBadgeSelector = `${imageContainerSelector} .fh-badge`;
         switch (position) {
             case 'left':
                 return `
@@ -84,7 +91,7 @@ const insertStyle = async () => {
             case 'right':
                 return `
                     ${[topBadgeSelector, imageBadgeSelector].join(',')} { display: none; }
-                    ${contentSelector} .metadata {
+                    ${metadataSelector} {
                         display: flex;
                     }
                     ${metaBadgeSelector} {
@@ -95,7 +102,7 @@ const insertStyle = async () => {
             case 'top':
                 return `
                     ${[metaBadgeSelector, imageBadgeSelector].join(',')} { display: none; }
-                    ${contentSelector} .title {
+                    ${contentSelector} .EntryTitle {
                         display: block;
                         clear: left;
                         padding-top: 2px;
@@ -107,6 +114,9 @@ const insertStyle = async () => {
             case 'image':
                 return `
                     ${[metaBadgeSelector, topBadgeSelector].join(',')} { display: none; }
+                    ${imageContainerSelector} {
+                        position: relative;
+                    }
                     ${imageBadgeSelector} {
                         position: absolute;
                         top: 1px;
@@ -119,11 +129,13 @@ const insertStyle = async () => {
         }
     })(positions.magagine) : '';
     const cardsPositionStyle = visibilities.cards ? ((position) => {
-        const listEntriesClass = listEntriesClasses.cards;
-        const contentSelector = `.${listEntriesClass} .entry.u5 .content`;
-        const metaBadgeSelector = `${contentSelector} .metadata .fh-badge`;
+        const entrySelector = '.list-entries .CardEntry';
+        const contentSelector = `${entrySelector} .CardEntry__content`;
+        const metadataSelector = `${contentSelector} .EntryMetadata`;
+        const metaBadgeSelector = `${metadataSelector} .fh-badge`;
         const topBadgeSelector = `${contentSelector} > .fh-badge`;
-        const imageBadgeSelector = `.${listEntriesClass} .entry.u5 .visual .fh-badge`;
+        const imageContainerSelector = `${entrySelector} .CardEntry__visual-container`;
+        const imageBadgeSelector = `${imageContainerSelector} .fh-badge`;
         switch (position) {
             case 'left':
                 return `
@@ -135,11 +147,11 @@ const insertStyle = async () => {
             case 'right':
                 return `
                     ${[topBadgeSelector, imageBadgeSelector].join(',')} { display: none; }
-                    ${contentSelector} .metadata {
+                    ${metadataSelector} {
                         display: flex;
                     }
                     ${metaBadgeSelector} {
-                        margin: 0 0 0　12px;
+                        margin: 0 0 0 12px;
                         order: 1;
                     }
                 `;
@@ -161,16 +173,16 @@ const insertStyle = async () => {
         switch (position) {
             case 'left':
                 return `
-                    .entryHeader .metadata .fh-badge {
+                    .entryHeader .EntryMetadata .fh-badge {
                         margin: 0 8px 0 0;
                     }
                 `;
             case 'right':
                 return `
-                    .entryHeader .metadata {
+                    .entryHeader .EntryMetadata {
                         display: flex;
                     }
-                    .entryHeader .metadata .fh-badge {
+                    .entryHeader .EntryMetadata .fh-badge {
                         margin: 0 0 0 8px;
                         order: 1;
                     }
@@ -229,25 +241,59 @@ const getHabetuBadge = async (url) => {
     }
 };
 
-const handleEntry = async (entry) => {
-    const url = getEntryUrl('content', entry);
+const handleTitleOnlyEntry = async (entry) => {
+    const url = getEntryUrl('TitleOnlyEntry__content', entry);
     const badge = await getHabetuBadge(url);
     if (!badge) {
         return;
     }
-    const content = entry.querySelector('.content');
+    const content = entry.querySelector('.TitleOnlyEntry__content');
+    content.insertBefore(badge, content.firstChild);
+}
+
+const handleMagazineEntry = async (entry) => {
+    const url = getEntryUrl('MagazineEntry__content', entry);
+    const badge = await getHabetuBadge(url);
+    if (!badge) {
+        return;
+    }
+    const content = entry.querySelector('.MagazineEntry__content');
     content.insertBefore(badge, content.firstChild);
 
-    const metadata = content.querySelector('.metadata');
-    if (metadata) {
-        const metadataBadge = await getHabetuBadge(url);
-        metadata.insertBefore(metadataBadge, metadata.firstChild);
-    }
+    const metadata = entry.querySelector('.EntryMetadata');
+    const metadataBadge = await getHabetuBadge(url);
+    metadata.insertBefore(metadataBadge, metadata.firstChild);
 
-    const visual = entry.querySelector('.visual');
-    if (visual) {
-        const visualBadge = await getHabetuBadge(url);
-        visual.appendChild(visualBadge);
+    const visual = entry.querySelector('.MagazineEntry__visual');
+    const visualBadge = await getHabetuBadge(url);
+    visual.appendChild(visualBadge);
+}
+
+const handleCardEntry = async (entry) => {
+    const url = getEntryUrl('CardEntry__content', entry);
+    const badge = await getHabetuBadge(url);
+    if (!badge) {
+        return;
+    }
+    const content = entry.querySelector('.CardEntry__content');
+    content.insertBefore(badge, content.firstChild);
+
+    const metadata = entry.querySelector('.EntryMetadata');
+    const metadataBadge = await getHabetuBadge(url);
+    metadata.insertBefore(metadataBadge, metadata.firstChild);
+
+    const visual = entry.querySelector('.CardEntry__visual-container');
+    const visualBadge = await getHabetuBadge(url);
+    visual.appendChild(visualBadge);
+}
+
+const handleEntry = async (entry) => {
+    if (entry.classList.contains('TitleOnlyEntry')) {
+        handleTitleOnlyEntry(entry);
+    } else if (entry.classList.contains('MagazineEntry')) {
+        handleMagazineEntry(entry);
+    } else if (entry.classList.contains('CardEntry')) {
+        handleCardEntry(entry);
     }
 };
 
@@ -257,7 +303,7 @@ const handleU100Entry = async (entry) => {
     if (!badge) {
         return;
     }
-    const metadata = entry.querySelector('.metadata.EntryMetadata');
+    const metadata = entry.querySelector('.EntryMetadata');
     metadata.insertBefore(badge, metadata.firstChild);
 };
 
