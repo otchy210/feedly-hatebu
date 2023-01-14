@@ -2,13 +2,6 @@ import { defaultOptions, sendMessage, getSynced } from './common';
 import { newApiCall } from './HatenaApi';
 import { getBadgeStyle } from './badgeStyle';
 
-const listEntriesClasses = {
-    titleOnly: 'list-entries--layout-u0',
-    magagine: 'list-entries--layout-u4',
-    cards: 'list-entries--layout-u5',
-    article: 'list-entries--layout-u100'
-};
-
 const insertStyle = async () => {
     const options = await getSynced('options', defaultOptions);
     const { visibilities, selectedDesign } = options;
@@ -120,11 +113,9 @@ const insertStyle = async () => {
                     }
                     ${imageBadgeSelector} {
                         position: absolute;
-                        top: 1px;
-                        left: 1px;
-                        box-shadow: ${
-                            ['0', '1px'].map(x => ['0', '1px'].map(y => `${x} ${y} 0 #fff`).join(',')).join(',')
-                        };
+                        top: 3px;
+                        left: 3px;
+                        outline: solid 1px #fff;
                     }
                 `;
         }
@@ -163,9 +154,7 @@ const insertStyle = async () => {
                         position: absolute;
                         top: 8px;
                         left: 8px;
-                        box-shadow: ${
-                            ['-2px', '0', '2px'].map(x => ['-2px', '0', '2px'].map(y => `${x} ${y} 0 #fff`).join(',')).join(',')
-                        };
+                        outline: solid 2px #fff;
                     }
                 `;
         }

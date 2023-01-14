@@ -34,7 +34,6 @@ const getOriginalStyle = (design) => {
             .fh-badge {
                 padding: 0 0 1px 0;
                 border-bottom-color: #ff0808;
-                height: 15px;
                 background-color: #ffcbcb;
                 font-family: monospace;
                 font-size: 12px;
@@ -54,10 +53,6 @@ const getOriginalStyle = (design) => {
                 border-bottom-style: solid;
                 border-bottom-width: 1px;
                 border-bottom-color: inherit;
-                color: inherit;
-            }
-            .metadata .fh-badge a:hover,
-            .fx .entry .fh-badge a:hover {
                 color: inherit;
                 text-decoration: none;
             }
@@ -121,10 +116,12 @@ const getOriginalStyle = (design) => {
                 font-size: 11px;
                 font-family: sans-serif;
             }
-            .metadata .fh-badge {
+             .EntryMetadata .fh-badge {
                 font-size: 13px;
+                line-height: 17px;
             }
-            .visual .fh-badge {
+            .MagazineEntry__visual .fh-badge,
+            .CardEntry__visual-container .fh-badge {
                 border-radius: 1px;
                 background-color: #fff;
             }
