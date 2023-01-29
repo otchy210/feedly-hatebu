@@ -26,7 +26,7 @@ const insertStyle = async () => {
                 `;
             case 'cards':
                     return `
-                    .list-entries .CardEntry__visual-container .fh-badge,
+                    .list-entries .CardEntry__visual .fh-badge,
                     .list-entries .CardEntry__content .fh-badge {
                         display: none;
                     }
@@ -125,7 +125,7 @@ const insertStyle = async () => {
         const metadataSelector = `${contentSelector} .EntryMetadata`;
         const metaBadgeSelector = `${metadataSelector} .fh-badge`;
         const topBadgeSelector = `${contentSelector} > .fh-badge`;
-        const imageContainerSelector = `${entrySelector} .CardEntry__visual-container`;
+        const imageContainerSelector = `${entrySelector} .CardEntry__visual`;
         const imageBadgeSelector = `${imageContainerSelector} .fh-badge`;
         switch (position) {
             case 'left':
@@ -271,18 +271,26 @@ const handleCardEntry = async (entry) => {
     const metadataBadge = await getHabetuBadge(url);
     metadata.insertBefore(metadataBadge, metadata.firstChild);
 
-    const visual = entry.querySelector('.CardEntry__visual-container');
+    const visual = entry.querySelector('.CardEntry__visual');
     const visualBadge = await getHabetuBadge(url);
     visual.appendChild(visualBadge);
 }
 
 const handleEntry = async (entry) => {
-    if (entry.classList.contains('TitleOnlyEntry')) {
-        handleTitleOnlyEntry(entry);
-    } else if (entry.classList.contains('MagazineEntry')) {
-        handleMagazineEntry(entry);
-    } else if (entry.classList.contains('CardEntry')) {
-        handleCardEntry(entry);
+    const titleOnlyEntry = entry.querySelector('.TitleOnlyEntry');
+    if (titleOnlyEntry) {
+        handleTitleOnlyEntry(titleOnlyEntry);
+        return;
+    }
+    const magagineEntry = entry.querySelector('.MagazineEntry');
+    if (magagineEntry) {
+        handleMagazineEntry(magagineEntry);
+        return;
+    }
+    const cardEntry = entry.querySelector('.CardEntry');
+    if (cardEntry) {
+        handleCardEntry(cardEntry);
+        return;
     }
 };
 
