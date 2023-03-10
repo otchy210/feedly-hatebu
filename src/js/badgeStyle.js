@@ -120,8 +120,8 @@ const getOriginalStyle = (design) => {
                 font-size: 13px;
                 line-height: 17px;
             }
-            .MagazineEntry__visual .fh-badge,
-            .CardEntry__visual-container .fh-badge {
+            .MagazineLayout__visual .fh-badge,
+            .CardLayout__visual-container .fh-badge {
                 border-radius: 1px;
                 background-color: #fff;
             }

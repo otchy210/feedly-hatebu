@@ -14,21 +14,21 @@ const insertStyle = async () => {
         switch (name) {
             case 'titleOnly':
                 return `
-                    .list-entries .TitleOnlyEntry__content .fh-badge {
+                    .list-entries .TitleOnlyLayout__content .fh-badge {
                         display: none;
                     }
                 `;
             case 'magagine':
                     return `
-                    .list-entries .MagazineEntry__visual .fh-badge,
-                    .list-entries .MagazineEntry__content .fh-badge {
+                    .list-entries .MagazineLayout__visual .fh-badge,
+                    .list-entries .MagazineLayout__content .fh-badge {
                         display: none;
                     }
                 `;
             case 'cards':
                     return `
-                    .list-entries .CardEntry__visual .fh-badge,
-                    .list-entries .CardEntry__content .fh-badge {
+                    .list-entries .CardLayout__visual .fh-badge,
+                    .list-entries .CardLayout__content .fh-badge {
                         display: none;
                     }
                 `;
@@ -46,33 +46,33 @@ const insertStyle = async () => {
         switch (position) {
             case 'left':
                 return `
-                    .list-entries .TitleOnlyEntry__content .fh-badge {
+                    .list-entries .TitleOnlyLayout__content .fh-badge {
                         margin: 0 4px 0 0;
                     }
                 `;
             case 'right':
                 return `
-                    .list-entries .TitleOnlyEntry__content {
+                    .list-entries .TitleOnlyLayout__content {
                         position: relative;
                     }
-                    .list-entries .TitleOnlyEntry__content .fh-badge {
+                    .list-entries .TitleOnlyLayout__content .fh-badge {
                         position: absolute;
                         right: 0;
                         box-shadow: -4px 0 0 #fff;
                     }
-                    .list-entries .TitleOnlyEntry:hover .TitleOnlyEntry__content .fh-badge {
+                    .list-entries .TitleOnlyLayout:hover .TitleOnlyLayout__content .fh-badge {
                         display: none;
                     }
                 `;
         }
     })(positions.titleOnly) : '';
     const magaginePositionStyle = visibilities.magagine ? ((position) => {
-        const entrySelector = '.list-entries .MagazineEntry';
-        const contentSelector = `${entrySelector} .MagazineEntry__content`;
+        const entrySelector = '.list-entries .MagazineLayout';
+        const contentSelector = `${entrySelector} .MagazineLayout__content`;
         const metadataSelector = `${contentSelector} .EntryMetadata`;
         const metaBadgeSelector = `${metadataSelector} .fh-badge`;
         const topBadgeSelector = `${contentSelector} > .fh-badge`;
-        const imageContainerSelector = `${entrySelector} .MagazineEntry__visual`;
+        const imageContainerSelector = `${entrySelector} .MagazineLayout__visual`;
         const imageBadgeSelector = `${imageContainerSelector} .fh-badge`;
         switch (position) {
             case 'left':
@@ -121,12 +121,12 @@ const insertStyle = async () => {
         }
     })(positions.magagine) : '';
     const cardsPositionStyle = visibilities.cards ? ((position) => {
-        const entrySelector = '.list-entries .CardEntry';
-        const contentSelector = `${entrySelector} .CardEntry__content`;
+        const entrySelector = '.list-entries .CardLayout';
+        const contentSelector = `${entrySelector} .CardLayout__content`;
         const metadataSelector = `${contentSelector} .EntryMetadata`;
         const metaBadgeSelector = `${metadataSelector} .fh-badge`;
         const topBadgeSelector = `${contentSelector} > .fh-badge`;
-        const imageContainerSelector = `${entrySelector} .CardEntry__visual`;
+        const imageContainerSelector = `${entrySelector} .CardLayout__visual`;
         const imageBadgeSelector = `${imageContainerSelector} .fh-badge`;
         switch (position) {
             case 'left':
@@ -258,66 +258,66 @@ const getHabetuBadge = async (url) => {
     }
 };
 
-const handleTitleOnlyEntry = async (entry) => {
-    const url = getEntryUrl('TitleOnlyEntry__content', entry);
+const handleTitleOnlyLayout = async (entry) => {
+    const url = getEntryUrl('TitleOnlyLayout__title', entry);
     const badge = await getHabetuBadge(url);
     if (!badge) {
         return;
     }
-    const content = entry.querySelector('.TitleOnlyEntry__content');
+    const content = entry.querySelector('.TitleOnlyLayout__content');
     content.insertBefore(badge, content.firstChild);
 }
 
-const handleMagazineEntry = async (entry) => {
-    const url = getEntryUrl('MagazineEntry__content', entry);
+const handleMagazineLayout = async (entry) => {
+    const url = getEntryUrl('MagazineLayout__title', entry);
     const badge = await getHabetuBadge(url);
     if (!badge) {
         return;
     }
-    const content = entry.querySelector('.MagazineEntry__content');
+    const content = entry.querySelector('.MagazineLayout__content');
     content.insertBefore(badge, content.firstChild);
 
     const metadata = entry.querySelector('.EntryMetadata');
     const metadataBadge = await getHabetuBadge(url);
     metadata.insertBefore(metadataBadge, metadata.firstChild);
 
-    const visual = entry.querySelector('.MagazineEntry__visual');
+    const visual = entry.querySelector('.MagazineLayout__visual');
     const visualBadge = await getHabetuBadge(url);
     visual.appendChild(visualBadge);
 }
 
-const handleCardEntry = async (entry) => {
-    const url = getEntryUrl('CardEntry__content', entry);
+const handleCardLayout = async (entry) => {
+    const url = getEntryUrl('CardLayout__title', entry);
     const badge = await getHabetuBadge(url);
     if (!badge) {
         return;
     }
-    const content = entry.querySelector('.CardEntry__content');
+    const content = entry.querySelector('.CardLayout__content');
     content.insertBefore(badge, content.firstChild);
 
     const metadata = entry.querySelector('.EntryMetadata');
     const metadataBadge = await getHabetuBadge(url);
     metadata.insertBefore(metadataBadge, metadata.firstChild);
 
-    const visual = entry.querySelector('.CardEntry__visual');
+    const visual = entry.querySelector('.CardLayout__visual');
     const visualBadge = await getHabetuBadge(url);
     visual.appendChild(visualBadge);
 }
 
 const handleEntry = async (entry) => {
-    const titleOnlyEntry = entry.querySelector('.TitleOnlyEntry');
-    if (titleOnlyEntry) {
-        handleTitleOnlyEntry(titleOnlyEntry);
+    const titleOnlyLayout = entry.querySelector('.TitleOnlyLayout');
+    if (titleOnlyLayout) {
+        handleTitleOnlyLayout(titleOnlyLayout);
         return;
     }
-    const magagineEntry = entry.querySelector('.MagazineEntry');
-    if (magagineEntry) {
-        handleMagazineEntry(magagineEntry);
+    const magagineLayout = entry.querySelector('.MagazineLayout');
+    if (magagineLayout) {
+        handleMagazineLayout(magagineLayout);
         return;
     }
-    const cardEntry = entry.querySelector('.CardEntry');
-    if (cardEntry) {
-        handleCardEntry(cardEntry);
+    const cardLayout = entry.querySelector('.CardLayout');
+    if (cardLayout) {
+        handleCardLayout(cardLayout);
         return;
     }
 };
