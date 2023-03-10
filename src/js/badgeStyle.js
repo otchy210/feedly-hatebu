@@ -121,7 +121,7 @@ const getOriginalStyle = (design) => {
                 line-height: 17px;
             }
             .MagazineLayout__visual .fh-badge,
-            .CardEntry__visual-container .fh-badge {
+            .CardLayout__visual-container .fh-badge {
                 border-radius: 1px;
                 background-color: #fff;
             }

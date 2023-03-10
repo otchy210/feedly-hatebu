@@ -27,8 +27,8 @@ const insertStyle = async () => {
                 `;
             case 'cards':
                     return `
-                    .list-entries .CardEntry__visual .fh-badge,
-                    .list-entries .CardEntry__content .fh-badge {
+                    .list-entries .CardLayout__visual .fh-badge,
+                    .list-entries .CardLayout__content .fh-badge {
                         display: none;
                     }
                 `;
@@ -121,12 +121,12 @@ const insertStyle = async () => {
         }
     })(positions.magagine) : '';
     const cardsPositionStyle = visibilities.cards ? ((position) => {
-        const entrySelector = '.list-entries .CardEntry';
-        const contentSelector = `${entrySelector} .CardEntry__content`;
+        const entrySelector = '.list-entries .CardLayout';
+        const contentSelector = `${entrySelector} .CardLayout__content`;
         const metadataSelector = `${contentSelector} .EntryMetadata`;
         const metaBadgeSelector = `${metadataSelector} .fh-badge`;
         const topBadgeSelector = `${contentSelector} > .fh-badge`;
-        const imageContainerSelector = `${entrySelector} .CardEntry__visual`;
+        const imageContainerSelector = `${entrySelector} .CardLayout__visual`;
         const imageBadgeSelector = `${imageContainerSelector} .fh-badge`;
         switch (position) {
             case 'left':
@@ -286,20 +286,20 @@ const handleMagazineLayout = async (entry) => {
     visual.appendChild(visualBadge);
 }
 
-const handleCardEntry = async (entry) => {
-    const url = getEntryUrl('CardEntry__content', entry);
+const handleCardLayout = async (entry) => {
+    const url = getEntryUrl('CardLayout__title', entry);
     const badge = await getHabetuBadge(url);
     if (!badge) {
         return;
     }
-    const content = entry.querySelector('.CardEntry__content');
+    const content = entry.querySelector('.CardLayout__content');
     content.insertBefore(badge, content.firstChild);
 
     const metadata = entry.querySelector('.EntryMetadata');
     const metadataBadge = await getHabetuBadge(url);
     metadata.insertBefore(metadataBadge, metadata.firstChild);
 
-    const visual = entry.querySelector('.CardEntry__visual');
+    const visual = entry.querySelector('.CardLayout__visual');
     const visualBadge = await getHabetuBadge(url);
     visual.appendChild(visualBadge);
 }
@@ -315,9 +315,9 @@ const handleEntry = async (entry) => {
         handleMagazineLayout(magagineLayout);
         return;
     }
-    const cardEntry = entry.querySelector('.CardEntry');
-    if (cardEntry) {
-        handleCardEntry(cardEntry);
+    const cardLayout = entry.querySelector('.CardLayout');
+    if (cardLayout) {
+        handleCardLayout(cardLayout);
         return;
     }
 };
