@@ -14,7 +14,7 @@ const insertStyle = async () => {
         switch (name) {
             case 'titleOnly':
                 return `
-                    .list-entries .TitleOnlyEntry__content .fh-badge {
+                    .list-entries .TitleOnlyLayout__content .fh-badge {
                         display: none;
                     }
                 `;
@@ -46,21 +46,21 @@ const insertStyle = async () => {
         switch (position) {
             case 'left':
                 return `
-                    .list-entries .TitleOnlyEntry__content .fh-badge {
+                    .list-entries .TitleOnlyLayout__content .fh-badge {
                         margin: 0 4px 0 0;
                     }
                 `;
             case 'right':
                 return `
-                    .list-entries .TitleOnlyEntry__content {
+                    .list-entries .TitleOnlyLayout__content {
                         position: relative;
                     }
-                    .list-entries .TitleOnlyEntry__content .fh-badge {
+                    .list-entries .TitleOnlyLayout__content .fh-badge {
                         position: absolute;
                         right: 0;
                         box-shadow: -4px 0 0 #fff;
                     }
-                    .list-entries .TitleOnlyEntry:hover .TitleOnlyEntry__content .fh-badge {
+                    .list-entries .TitleOnlyLayout:hover .TitleOnlyLayout__content .fh-badge {
                         display: none;
                     }
                 `;
@@ -258,13 +258,13 @@ const getHabetuBadge = async (url) => {
     }
 };
 
-const handleTitleOnlyEntry = async (entry) => {
-    const url = getEntryUrl('TitleOnlyEntry__content', entry);
+const handleTitleOnlyLayout = async (entry) => {
+    const url = getEntryUrl('TitleOnlyLayout__title', entry);
     const badge = await getHabetuBadge(url);
     if (!badge) {
         return;
     }
-    const content = entry.querySelector('.TitleOnlyEntry__content');
+    const content = entry.querySelector('.TitleOnlyLayout__content');
     content.insertBefore(badge, content.firstChild);
 }
 
@@ -305,9 +305,9 @@ const handleCardEntry = async (entry) => {
 }
 
 const handleEntry = async (entry) => {
-    const titleOnlyEntry = entry.querySelector('.TitleOnlyEntry');
-    if (titleOnlyEntry) {
-        handleTitleOnlyEntry(titleOnlyEntry);
+    const titleOnlyLayout = entry.querySelector('.TitleOnlyLayout');
+    if (titleOnlyLayout) {
+        handleTitleOnlyLayout(titleOnlyLayout);
         return;
     }
     const magagineEntry = entry.querySelector('.MagazineEntry');
