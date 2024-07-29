@@ -14,21 +14,21 @@ const insertStyle = async () => {
         switch (name) {
             case 'titleOnly':
                 return `
-                    .list-entries .TitleOnlyLayout__content .fh-badge {
+                    .TitleOnlyLayout__content .fh-badge {
                         display: none;
                     }
                 `;
             case 'magagine':
                     return `
-                    .list-entries .MagazineLayout__visual .fh-badge,
-                    .list-entries .MagazineLayout__content .fh-badge {
+                    .MagazineLayout__visual .fh-badge,
+                    .MagazineLayout__content .fh-badge {
                         display: none;
                     }
                 `;
             case 'cards':
                     return `
-                    .list-entries .CardLayout__visual .fh-badge,
-                    .list-entries .CardLayout__content .fh-badge {
+                    .CardLayout__visual .fh-badge,
+                    .CardLayout__content .fh-badge {
                         display: none;
                     }
                 `;
@@ -46,28 +46,28 @@ const insertStyle = async () => {
         switch (position) {
             case 'left':
                 return `
-                    .list-entries .TitleOnlyLayout__content .fh-badge {
+                    .TitleOnlyLayout__content .fh-badge {
                         margin: 0 4px 0 0;
                     }
                 `;
             case 'right':
                 return `
-                    .list-entries .TitleOnlyLayout__content {
+                    .TitleOnlyLayout__content {
                         position: relative;
                     }
-                    .list-entries .TitleOnlyLayout__content .fh-badge {
+                    .TitleOnlyLayout__content .fh-badge {
                         position: absolute;
                         right: 0;
                         box-shadow: -4px 0 0 #fff;
                     }
-                    .list-entries .TitleOnlyLayout:hover .TitleOnlyLayout__content .fh-badge {
+                    .TitleOnlyLayout:hover .TitleOnlyLayout__content .fh-badge {
                         display: none;
                     }
                 `;
         }
     })(positions.titleOnly) : '';
     const magaginePositionStyle = visibilities.magagine ? ((position) => {
-        const entrySelector = '.list-entries .MagazineLayout';
+        const entrySelector = '.MagazineLayout';
         const contentSelector = `${entrySelector} .MagazineLayout__content`;
         const metadataSelector = `${contentSelector} .EntryMetadata`;
         const metaBadgeSelector = `${metadataSelector} .fh-badge`;
@@ -121,7 +121,7 @@ const insertStyle = async () => {
         }
     })(positions.magagine) : '';
     const cardsPositionStyle = visibilities.cards ? ((position) => {
-        const entrySelector = '.list-entries .CardLayout';
+        const entrySelector = '.CardLayout';
         const contentSelector = `${entrySelector} .CardLayout__content`;
         const metadataSelector = `${contentSelector} .EntryMetadata`;
         const metaBadgeSelector = `${metadataSelector} .fh-badge`;
@@ -264,6 +264,9 @@ const handleTitleOnlyLayout = async (entry) => {
     if (!badge) {
         return;
     }
+    if (entry.querySelector('.fh-badge')) {
+        return;
+    }
     const content = entry.querySelector('.TitleOnlyLayout__content');
     content.insertBefore(badge, content.firstChild);
 }
@@ -272,6 +275,9 @@ const handleMagazineLayout = async (entry) => {
     const url = getEntryUrl('MagazineLayout__title', entry);
     const badge = await getHabetuBadge(url);
     if (!badge) {
+        return;
+    }
+    if (entry.querySelector('.fh-badge')) {
         return;
     }
     const content = entry.querySelector('.MagazineLayout__content');
@@ -292,6 +298,9 @@ const handleCardLayout = async (entry) => {
     if (!badge) {
         return;
     }
+    if (entry.querySelector('.fh-badge')) {
+        return;
+    }
     const content = entry.querySelector('.CardLayout__content');
     content.insertBefore(badge, content.firstChild);
 
@@ -305,6 +314,9 @@ const handleCardLayout = async (entry) => {
 }
 
 const handleEntry = async (entry) => {
+    if (entry.querySelector('.fh-badge')) {
+        return;
+    }
     const titleOnlyLayout = entry.querySelector('.TitleOnlyLayout');
     if (titleOnlyLayout) {
         handleTitleOnlyLayout(titleOnlyLayout);
@@ -323,9 +335,15 @@ const handleEntry = async (entry) => {
 };
 
 const handleU100Entry = async (entry) => {
+    if (entry.querySelector('.fh-badge')) {
+        return;
+    }
     const url = getEntryUrl('entryHeader', entry);
     const badge = await getHabetuBadge(url);
     if (!badge) {
+        return;
+    }
+    if (entry.querySelector('.fh-badge')) {
         return;
     }
     const metadata = entry.querySelector('.EntryMetadata');
@@ -333,30 +351,33 @@ const handleU100Entry = async (entry) => {
 };
 
 const watchDomChange = () => {
-    document.addEventListener('DOMNodeInserted', (e) => {
-        const target = e.target;
-        if (!target?.querySelectorAll) {
-            return;
-        }
-        if (target.classList.contains('entry')) {
-            handleEntry(target);
-            return;
-        } else if (target.classList.contains('u100Entry')) {
-            handleU100Entry(target);
-            return;
-        }
-        const entries = target.querySelectorAll('.entry');
-        const u100Entries = target.querySelectorAll('.u100Entry');
-        if (entries.length === 0 && u100Entries.length === 0) {
-            return;
-        }
-        for (const entry of entries) {
-            handleEntry(entry);
-        }
-        for (const u100entry of u100Entries) {
-            handleU100Entry(u100entry);
+    const observer = new MutationObserver((mutationList) => {
+        for (const mutation of mutationList) {
+            const target = mutation.target;
+            if (!target?.querySelectorAll) {
+                return;
+            }
+            if (target.classList.contains('entry')) {
+                handleEntry(target);
+                return;
+            } else if (target.classList.contains('u100Entry')) {
+                handleU100Entry(target);
+                return;
+            }
+            const entries = target.querySelectorAll('.entry');
+            const u100Entries = target.querySelectorAll('.u100Entry');
+            if (entries.length === 0 && u100Entries.length === 0) {
+                return;
+            }
+            for (const entry of entries) {
+                handleEntry(entry);
+            }
+            for (const u100entry of u100Entries) {
+                handleU100Entry(u100entry);
+            }
         }
     });
+    observer.observe(document.body, {childList: true, subtree: true});
 };
 
 // init
