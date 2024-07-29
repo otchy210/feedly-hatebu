@@ -28,16 +28,18 @@ export const newApiCall = (url) => {
 
     return new Promise((resolve, reject) => {
         let resolved = false;
-        result.addEventListener('DOMSubtreeModified', () => {
+        const observer = new MutationObserver((mutationList) => {
             const response = JSON.parse(result.innerHTML);
             resolved = true;
             resolve(response);
         });
+        observer.observe(result, {childList: true});
         scripts.forEach(s => document.head.appendChild(s));
         setTimeout(() => {
             if (!resolved) {
                 reject(`Timeout: ${jsonpUrl}`);
             }
+            observer.disconnect();
             scripts.forEach(s => document.head.removeChild(s));
         }, 3000);
     });
