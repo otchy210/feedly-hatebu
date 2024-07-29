@@ -14,21 +14,21 @@ const insertStyle = async () => {
         switch (name) {
             case 'titleOnly':
                 return `
-                    .list-entries .TitleOnlyLayout__content .fh-badge {
+                    .TitleOnlyLayout__content .fh-badge {
                         display: none;
                     }
                 `;
             case 'magagine':
                     return `
-                    .list-entries .MagazineLayout__visual .fh-badge,
-                    .list-entries .MagazineLayout__content .fh-badge {
+                    .MagazineLayout__visual .fh-badge,
+                    .MagazineLayout__content .fh-badge {
                         display: none;
                     }
                 `;
             case 'cards':
                     return `
-                    .list-entries .CardLayout__visual .fh-badge,
-                    .list-entries .CardLayout__content .fh-badge {
+                    .CardLayout__visual .fh-badge,
+                    .CardLayout__content .fh-badge {
                         display: none;
                     }
                 `;
@@ -46,28 +46,28 @@ const insertStyle = async () => {
         switch (position) {
             case 'left':
                 return `
-                    .list-entries .TitleOnlyLayout__content .fh-badge {
+                    .TitleOnlyLayout__content .fh-badge {
                         margin: 0 4px 0 0;
                     }
                 `;
             case 'right':
                 return `
-                    .list-entries .TitleOnlyLayout__content {
+                    .TitleOnlyLayout__content {
                         position: relative;
                     }
-                    .list-entries .TitleOnlyLayout__content .fh-badge {
+                    .TitleOnlyLayout__content .fh-badge {
                         position: absolute;
                         right: 0;
                         box-shadow: -4px 0 0 #fff;
                     }
-                    .list-entries .TitleOnlyLayout:hover .TitleOnlyLayout__content .fh-badge {
+                    .TitleOnlyLayout:hover .TitleOnlyLayout__content .fh-badge {
                         display: none;
                     }
                 `;
         }
     })(positions.titleOnly) : '';
     const magaginePositionStyle = visibilities.magagine ? ((position) => {
-        const entrySelector = '.list-entries .MagazineLayout';
+        const entrySelector = '.MagazineLayout';
         const contentSelector = `${entrySelector} .MagazineLayout__content`;
         const metadataSelector = `${contentSelector} .EntryMetadata`;
         const metaBadgeSelector = `${metadataSelector} .fh-badge`;
@@ -121,7 +121,7 @@ const insertStyle = async () => {
         }
     })(positions.magagine) : '';
     const cardsPositionStyle = visibilities.cards ? ((position) => {
-        const entrySelector = '.list-entries .CardLayout';
+        const entrySelector = '.CardLayout';
         const contentSelector = `${entrySelector} .CardLayout__content`;
         const metadataSelector = `${contentSelector} .EntryMetadata`;
         const metaBadgeSelector = `${metadataSelector} .fh-badge`;
