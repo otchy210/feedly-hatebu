@@ -14,7 +14,7 @@ const insertStyle = async () => {
         switch (name) {
             case 'titleOnly':
                 return `
-                    .TitleOnlyLayout__content .fh-badge {
+                    .titleOnly .fh-badge {
                         display: none;
                     }
                 `;
@@ -46,21 +46,21 @@ const insertStyle = async () => {
         switch (position) {
             case 'left':
                 return `
-                    .TitleOnlyLayout__content .fh-badge {
+                    .titleOnly .fh-badge {
                         margin: 0 4px 0 0;
                     }
                 `;
             case 'right':
                 return `
-                    .TitleOnlyLayout__content {
+                    .titleOnly div:has(>div>a) {
                         position: relative;
                     }
-                    .TitleOnlyLayout__content .fh-badge {
+                    .titleOnly .fh-badge {
                         position: absolute;
                         right: 0;
                         box-shadow: -4px 0 0 #fff;
                     }
-                    .TitleOnlyLayout:hover .TitleOnlyLayout__content .fh-badge {
+                    .titleOnly:hover .fh-badge {
                         display: none;
                     }
                 `;
@@ -243,9 +243,9 @@ const createBadge = (hatebu) => {
     return badge;
 };
 
-const getEntryUrl = (headerClass, entry) => {
-    const entryTitle = entry.querySelector(`.${headerClass} > a:first-child`);
-    const url = entryTitle.getAttribute('href');
+const getEntryUrl = (entry) => {
+    const a = entry.querySelector('a');
+    const url = a.getAttribute('href');
     return url;
 }
 
@@ -258,8 +258,8 @@ const getHabetuBadge = async (url) => {
     }
 };
 
-const handleTitleOnlyLayout = async (entry) => {
-    const url = getEntryUrl('TitleOnlyLayout__title', entry);
+const handleTitleOnly = async (entry) => {
+    const url = getEntryUrl(entry);
     const badge = await getHabetuBadge(url);
     if (!badge) {
         return;
@@ -267,7 +267,7 @@ const handleTitleOnlyLayout = async (entry) => {
     if (entry.querySelector('.fh-badge')) {
         return;
     }
-    const content = entry.querySelector('.TitleOnlyLayout__content');
+    const content = entry.querySelector('div:has(>div>a)');
     content.insertBefore(badge, content.firstChild);
 }
 
@@ -317,9 +317,8 @@ const handleEntry = async (entry) => {
     if (entry.querySelector('.fh-badge')) {
         return;
     }
-    const titleOnlyLayout = entry.querySelector('.TitleOnlyLayout');
-    if (titleOnlyLayout) {
-        handleTitleOnlyLayout(titleOnlyLayout);
+    if (entry.classList.contains('titleOnly')) {
+        handleTitleOnly(entry);
         return;
     }
     const magagineLayout = entry.querySelector('.MagazineLayout');
@@ -358,9 +357,11 @@ const watchDomChange = () => {
                 return;
             }
             if (target.classList.contains('entry')) {
+                console.log('entry', target);
                 handleEntry(target);
                 return;
             } else if (target.classList.contains('u100Entry')) {
+                console.log('u100Entry', target);
                 handleU100Entry(target);
                 return;
             }
@@ -369,9 +370,11 @@ const watchDomChange = () => {
             if (entries.length === 0 && u100Entries.length === 0) {
                 return;
             }
+            console.log('.entry', entries);
             for (const entry of entries) {
                 handleEntry(entry);
             }
+            console.log('.u100Entry', u100Entries);
             for (const u100entry of u100Entries) {
                 handleU100Entry(u100entry);
             }
