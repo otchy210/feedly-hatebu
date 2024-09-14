@@ -67,12 +67,12 @@ const insertStyle = async () => {
         }
     })(positions.titleOnly) : '';
     const magaginePositionStyle = visibilities.magagine ? ((position) => {
-        const entrySelector = '.MagazineLayout';
-        const contentSelector = `${entrySelector} .MagazineLayout__content`;
-        const metadataSelector = `${contentSelector} .EntryMetadata`;
+        const entrySelector = '.magazine';
+        const contentSelector = `${entrySelector} div:has(>div>a)`;
+        const metadataSelector = `${entrySelector} .EntryMetadataWrapper`;
         const metaBadgeSelector = `${metadataSelector} .fh-badge`;
         const topBadgeSelector = `${contentSelector} > .fh-badge`;
-        const imageContainerSelector = `${entrySelector} .MagazineLayout__visual`;
+        const imageContainerSelector = `${entrySelector}>div:first-child>div:first-child>div:first-child>div:first-child`;
         const imageBadgeSelector = `${imageContainerSelector} .fh-badge`;
         switch (position) {
             case 'left':
@@ -96,7 +96,7 @@ const insertStyle = async () => {
             case 'top':
                 return `
                     ${[metaBadgeSelector, imageBadgeSelector].join(',')} { display: none; }
-                    ${contentSelector} .EntryTitle {
+                    ${contentSelector} > div {
                         display: block;
                         clear: left;
                         padding-top: 2px;
@@ -244,7 +244,7 @@ const createBadge = (hatebu) => {
 };
 
 const getEntryUrl = (entry) => {
-    const a = entry.querySelector('a');
+    const a = entry.querySelector('a.EntryTitleLink');
     const url = a.getAttribute('href');
     return url;
 }
@@ -271,8 +271,8 @@ const handleTitleOnly = async (entry) => {
     content.insertBefore(badge, content.firstChild);
 }
 
-const handleMagazineLayout = async (entry) => {
-    const url = getEntryUrl('MagazineLayout__title', entry);
+const handleMagazine = async (entry) => {
+    const url = getEntryUrl(entry);
     const badge = await getHabetuBadge(url);
     if (!badge) {
         return;
@@ -280,14 +280,14 @@ const handleMagazineLayout = async (entry) => {
     if (entry.querySelector('.fh-badge')) {
         return;
     }
-    const content = entry.querySelector('.MagazineLayout__content');
+    const content = entry.querySelector('div:has(>div>a)');
     content.insertBefore(badge, content.firstChild);
 
-    const metadata = entry.querySelector('.EntryMetadata');
+    const metadata = entry.querySelector('.EntryMetadataWrapper');
     const metadataBadge = await getHabetuBadge(url);
     metadata.insertBefore(metadataBadge, metadata.firstChild);
 
-    const visual = entry.querySelector('.MagazineLayout__visual');
+    const visual = entry.querySelector('div:first-child>div:first-child>div:first-child>div:first-child');
     const visualBadge = await getHabetuBadge(url);
     visual.appendChild(visualBadge);
 }
@@ -321,9 +321,8 @@ const handleEntry = async (entry) => {
         handleTitleOnly(entry);
         return;
     }
-    const magagineLayout = entry.querySelector('.MagazineLayout');
-    if (magagineLayout) {
-        handleMagazineLayout(magagineLayout);
+    if (entry.classList.contains('magazine')) {
+        handleMagazine(entry);
         return;
     }
     const cardLayout = entry.querySelector('.CardLayout');
@@ -357,11 +356,9 @@ const watchDomChange = () => {
                 return;
             }
             if (target.classList.contains('entry')) {
-                console.log('entry', target);
                 handleEntry(target);
                 return;
             } else if (target.classList.contains('u100Entry')) {
-                console.log('u100Entry', target);
                 handleU100Entry(target);
                 return;
             }
@@ -370,11 +367,9 @@ const watchDomChange = () => {
             if (entries.length === 0 && u100Entries.length === 0) {
                 return;
             }
-            console.log('.entry', entries);
             for (const entry of entries) {
                 handleEntry(entry);
             }
-            console.log('.u100Entry', u100Entries);
             for (const u100entry of u100Entries) {
                 handleU100Entry(u100entry);
             }
