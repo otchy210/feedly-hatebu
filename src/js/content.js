@@ -121,24 +121,22 @@ const insertStyle = async () => {
         }
     })(positions.magagine) : '';
     const cardsPositionStyle = visibilities.cards ? ((position) => {
-        const entrySelector = '.CardLayout';
-        const contentSelector = `${entrySelector} .CardLayout__content`;
-        const metadataSelector = `${contentSelector} .EntryMetadata`;
+        const entrySelector = '.cards';
+        const metadataSelector = `${entrySelector} .EntryMetadataWrapper`;
         const metaBadgeSelector = `${metadataSelector} .fh-badge`;
-        const topBadgeSelector = `${contentSelector} > .fh-badge`;
-        const imageContainerSelector = `${entrySelector} .CardLayout__visual`;
+        const imageContainerSelector = `${entrySelector} div:first-child>div:first-child>div:first-child`;
         const imageBadgeSelector = `${imageContainerSelector} .fh-badge`;
         switch (position) {
             case 'left':
                 return `
-                    ${[topBadgeSelector, imageBadgeSelector].join(',')} { display: none; }
+                    ${[imageBadgeSelector].join(',')} { display: none; }
                     ${metaBadgeSelector} {
                         margin: 0 12px 0 0;
                     }
                 `;
             case 'right':
                 return `
-                    ${[topBadgeSelector, imageBadgeSelector].join(',')} { display: none; }
+                    ${[imageBadgeSelector].join(',')} { display: none; }
                     ${metadataSelector} {
                         display: flex;
                     }
@@ -149,7 +147,7 @@ const insertStyle = async () => {
                 `;
             case 'image':
                 return `
-                    ${[topBadgeSelector, metaBadgeSelector].join(',')} { display: none; }
+                    ${[metaBadgeSelector].join(',')} { display: none; }
                     ${imageBadgeSelector} {
                         position: absolute;
                         top: 8px;
@@ -245,6 +243,9 @@ const createBadge = (hatebu) => {
 
 const getEntryUrl = (entry) => {
     const a = entry.querySelector('a.EntryTitleLink');
+    if (!a) {
+        return null;
+    }
     const url = a.getAttribute('href');
     return url;
 }
@@ -292,23 +293,22 @@ const handleMagazine = async (entry) => {
     visual.appendChild(visualBadge);
 }
 
-const handleCardLayout = async (entry) => {
-    const url = getEntryUrl('CardLayout__title', entry);
-    const badge = await getHabetuBadge(url);
-    if (!badge) {
+const handleCard = async (entry) => {
+    const url = getEntryUrl(entry);
+    if (!url) {
+        return;
+    }
+    const metadataBadge = await getHabetuBadge(url);
+    if (!metadataBadge) {
         return;
     }
     if (entry.querySelector('.fh-badge')) {
         return;
     }
-    const content = entry.querySelector('.CardLayout__content');
-    content.insertBefore(badge, content.firstChild);
-
-    const metadata = entry.querySelector('.EntryMetadata');
-    const metadataBadge = await getHabetuBadge(url);
+    const metadata = entry.querySelector('.EntryMetadataWrapper');
     metadata.insertBefore(metadataBadge, metadata.firstChild);
 
-    const visual = entry.querySelector('.CardLayout__visual');
+    const visual = entry.querySelector('div:first-child>div:first-child>div:first-child');
     const visualBadge = await getHabetuBadge(url);
     visual.appendChild(visualBadge);
 }
@@ -325,9 +325,8 @@ const handleEntry = async (entry) => {
         handleMagazine(entry);
         return;
     }
-    const cardLayout = entry.querySelector('.CardLayout');
-    if (cardLayout) {
-        handleCardLayout(cardLayout);
+    if (entry.classList.contains('cards')) {
+        handleCard(entry);
         return;
     }
 };
