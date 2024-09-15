@@ -13,7 +13,7 @@ const insertStyle = async () => {
         switch (name) {
             case 'titleOnly':
                 return `
-                    .TitleOnlyLayout__content .fh-badge {
+                    .titleOnly .fh-badge {
                         display: none;
                     }
                 `;
@@ -45,33 +45,33 @@ const insertStyle = async () => {
         switch (position) {
             case 'left':
                 return `
-                    .TitleOnlyLayout__content .fh-badge {
+                    .titleOnly .fh-badge {
                         margin: 0 4px 0 0;
                     }
                 `;
             case 'right':
                 return `
-                    .TitleOnlyLayout__content {
+                    .titleOnly div:has(>div>a) {
                         position: relative;
                     }
-                    .TitleOnlyLayout__content .fh-badge {
+                    .titleOnly .fh-badge {
                         position: absolute;
                         right: 0;
                         box-shadow: -4px 0 0 #fff;
                     }
-                    .TitleOnlyLayout:hover .TitleOnlyLayout__content .fh-badge {
+                    .titleOnly:hover .fh-badge {
                         display: none;
                     }
                 `;
         }
     })(positions.titleOnly) : '';
     const magaginePositionStyle = visibilities.magagine ? ((position) => {
-        const entrySelector = '.MagazineLayout';
-        const contentSelector = `${entrySelector} .MagazineLayout__content`;
-        const metadataSelector = `${contentSelector} .EntryMetadata`;
+        const entrySelector = '.magazine';
+        const contentSelector = `${entrySelector} div:has(>div>a)`;
+        const metadataSelector = `${entrySelector} .EntryMetadataWrapper`;
         const metaBadgeSelector = `${metadataSelector} .fh-badge`;
         const topBadgeSelector = `${contentSelector} > .fh-badge`;
-        const imageContainerSelector = `${entrySelector} .MagazineLayout__visual`;
+        const imageContainerSelector = `${entrySelector}>div:first-child>div:first-child>div:first-child>div:first-child`;
         const imageBadgeSelector = `${imageContainerSelector} .fh-badge`;
         switch (position) {
             case 'left':
@@ -95,7 +95,7 @@ const insertStyle = async () => {
             case 'top':
                 return `
                     ${[metaBadgeSelector, imageBadgeSelector].join(',')} { display: none; }
-                    ${contentSelector} .EntryTitle {
+                    ${contentSelector} > div {
                         display: block;
                         clear: left;
                         padding-top: 2px;
@@ -120,24 +120,22 @@ const insertStyle = async () => {
         }
     })(positions.magagine) : '';
     const cardsPositionStyle = visibilities.cards ? ((position) => {
-        const entrySelector = '.CardLayout';
-        const contentSelector = `${entrySelector} .CardLayout__content`;
-        const metadataSelector = `${contentSelector} .EntryMetadata`;
+        const entrySelector = '.cards';
+        const metadataSelector = `${entrySelector} .EntryMetadataWrapper`;
         const metaBadgeSelector = `${metadataSelector} .fh-badge`;
-        const topBadgeSelector = `${contentSelector} > .fh-badge`;
-        const imageContainerSelector = `${entrySelector} .CardLayout__visual`;
+        const imageContainerSelector = `${entrySelector} div:first-child>div:first-child>div:first-child`;
         const imageBadgeSelector = `${imageContainerSelector} .fh-badge`;
         switch (position) {
             case 'left':
                 return `
-                    ${[topBadgeSelector, imageBadgeSelector].join(',')} { display: none; }
+                    ${[imageBadgeSelector].join(',')} { display: none; }
                     ${metaBadgeSelector} {
                         margin: 0 12px 0 0;
                     }
                 `;
             case 'right':
                 return `
-                    ${[topBadgeSelector, imageBadgeSelector].join(',')} { display: none; }
+                    ${[imageBadgeSelector].join(',')} { display: none; }
                     ${metadataSelector} {
                         display: flex;
                     }
@@ -148,7 +146,7 @@ const insertStyle = async () => {
                 `;
             case 'image':
                 return `
-                    ${[topBadgeSelector, metaBadgeSelector].join(',')} { display: none; }
+                    ${[metaBadgeSelector].join(',')} { display: none; }
                     ${imageBadgeSelector} {
                         position: absolute;
                         top: 8px;
@@ -162,16 +160,16 @@ const insertStyle = async () => {
         switch (position) {
             case 'left':
                 return `
-                    .entryHeader .EntryMetadata .fh-badge {
+                    .entryHeader .EntryMetadataWrapper .fh-badge {
                         margin: 0 8px 0 0;
                     }
                 `;
             case 'right':
                 return `
-                    .entryHeader .EntryMetadata {
+                    .entryHeader .EntryMetadataWrapper {
                         display: flex;
                     }
-                    .entryHeader .EntryMetadata .fh-badge {
+                    .entryHeader .EntryMetadataWrapper .fh-badge {
                         margin: 0 0 0 8px;
                         order: 1;
                     }
@@ -191,6 +189,37 @@ const insertStyle = async () => {
     const style = document.createElement('style');
     style.innerHTML = styles;
     document.head.appendChild(style);
+};
+
+const getHatebu = async (url, retry) => {
+    const chachedHatebu = await sendMessage('GET_HATEBU_CACHE', {url});
+    if (chachedHatebu) {
+        return chachedHatebu;
+    }
+    return newApiCall(url)
+        .then(async (result) => {
+            if (result) {
+                return await sendMessage('CACHE_HATEBU', {result});
+            } else {
+                return await sendMessage('CACHE_HATEBU', {result: {
+                    requested_url: url,
+                    count: 0,
+                    entry_url: ''
+                }});
+            }
+        })
+        .catch(async (err) => {
+            if (!retry && err.startsWith('Timeout')) {
+                // retry once for timeout
+                return getHatebu(url, true);
+            }
+            console.error(`[Feedly はてブ] ${err}`);
+            return await sendMessage('CACHE_HATEBU', {result: {
+                requested_url: url,
+                count: 0,
+                entry_url: ''
+            }});
+        });
 };
 
 const createBadge = (hatebu) => {
@@ -215,9 +244,12 @@ const createBadge = (hatebu) => {
     return badge;
 };
 
-const getEntryUrl = (headerClass, entry) => {
-    const entryTitle = entry.querySelector(`.${headerClass} > a:first-child`);
-    const url = entryTitle.getAttribute('href');
+const getEntryUrl = (entry, className = 'EntryTitleLink') => {
+    const a = entry.querySelector(`a.${className}`);
+    if (!a) {
+        return null;
+    }
+    const url = a.getAttribute('href');
     return url;
 }
 
@@ -230,8 +262,8 @@ const getHabetuBadge = async (url) => {
     }
 };
 
-const handleTitleOnlyLayout = async (entry) => {
-    const url = getEntryUrl('TitleOnlyLayout__title', entry);
+const handleTitleOnly = async (entry) => {
+    const url = getEntryUrl(entry);
     const badge = await getHabetuBadge(url);
     if (!badge) {
         return;
@@ -239,12 +271,12 @@ const handleTitleOnlyLayout = async (entry) => {
     if (entry.querySelector('.fh-badge')) {
         return;
     }
-    const content = entry.querySelector('.TitleOnlyLayout__content');
+    const content = entry.querySelector('div:has(>div>a)');
     content.insertBefore(badge, content.firstChild);
 }
 
-const handleMagazineLayout = async (entry) => {
-    const url = getEntryUrl('MagazineLayout__title', entry);
+const handleMagazine = async (entry) => {
+    const url = getEntryUrl(entry);
     const badge = await getHabetuBadge(url);
     if (!badge) {
         return;
@@ -252,35 +284,34 @@ const handleMagazineLayout = async (entry) => {
     if (entry.querySelector('.fh-badge')) {
         return;
     }
-    const content = entry.querySelector('.MagazineLayout__content');
+    const content = entry.querySelector('div:has(>div>a)');
     content.insertBefore(badge, content.firstChild);
 
-    const metadata = entry.querySelector('.EntryMetadata');
+    const metadata = entry.querySelector('.EntryMetadataWrapper');
     const metadataBadge = await getHabetuBadge(url);
     metadata.insertBefore(metadataBadge, metadata.firstChild);
 
-    const visual = entry.querySelector('.MagazineLayout__visual');
+    const visual = entry.querySelector('div:first-child>div:first-child>div:first-child>div:first-child');
     const visualBadge = await getHabetuBadge(url);
     visual.appendChild(visualBadge);
 }
 
-const handleCardLayout = async (entry) => {
-    const url = getEntryUrl('CardLayout__title', entry);
-    const badge = await getHabetuBadge(url);
-    if (!badge) {
+const handleCard = async (entry) => {
+    const url = getEntryUrl(entry);
+    if (!url) {
+        return;
+    }
+    const metadataBadge = await getHabetuBadge(url);
+    if (!metadataBadge) {
         return;
     }
     if (entry.querySelector('.fh-badge')) {
         return;
     }
-    const content = entry.querySelector('.CardLayout__content');
-    content.insertBefore(badge, content.firstChild);
-
-    const metadata = entry.querySelector('.EntryMetadata');
-    const metadataBadge = await getHabetuBadge(url);
+    const metadata = entry.querySelector('.EntryMetadataWrapper');
     metadata.insertBefore(metadataBadge, metadata.firstChild);
 
-    const visual = entry.querySelector('.CardLayout__visual');
+    const visual = entry.querySelector('div:first-child>div:first-child>div:first-child');
     const visualBadge = await getHabetuBadge(url);
     visual.appendChild(visualBadge);
 }
@@ -289,19 +320,16 @@ const handleEntry = async (entry) => {
     if (entry.querySelector('.fh-badge')) {
         return;
     }
-    const titleOnlyLayout = entry.querySelector('.TitleOnlyLayout');
-    if (titleOnlyLayout) {
-        handleTitleOnlyLayout(titleOnlyLayout);
+    if (entry.classList.contains('titleOnly')) {
+        handleTitleOnly(entry);
         return;
     }
-    const magagineLayout = entry.querySelector('.MagazineLayout');
-    if (magagineLayout) {
-        handleMagazineLayout(magagineLayout);
+    if (entry.classList.contains('magazine')) {
+        handleMagazine(entry);
         return;
     }
-    const cardLayout = entry.querySelector('.CardLayout');
-    if (cardLayout) {
-        handleCardLayout(cardLayout);
+    if (entry.classList.contains('cards')) {
+        handleCard(entry);
         return;
     }
 };
@@ -310,7 +338,7 @@ const handleU100Entry = async (entry) => {
     if (entry.querySelector('.fh-badge')) {
         return;
     }
-    const url = getEntryUrl('entryHeader', entry);
+    const url = getEntryUrl(entry, 'Article__title');
     const badge = await getHabetuBadge(url);
     if (!badge) {
         return;
@@ -318,7 +346,7 @@ const handleU100Entry = async (entry) => {
     if (entry.querySelector('.fh-badge')) {
         return;
     }
-    const metadata = entry.querySelector('.EntryMetadata');
+    const metadata = entry.querySelector('.EntryMetadataWrapper');
     metadata.insertBefore(badge, metadata.firstChild);
 };
 
