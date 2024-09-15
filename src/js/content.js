@@ -192,7 +192,7 @@ const insertStyle = async () => {
     document.head.appendChild(style);
 };
 
-const getHatebu = async (url) => {
+const getHatebu = async (url, retry) => {
     const chachedHatebu = await sendMessage('GET_HATEBU_CACHE', {url});
     if (chachedHatebu) {
         return chachedHatebu;
@@ -210,6 +210,10 @@ const getHatebu = async (url) => {
             }
         })
         .catch(async (err) => {
+            if (!retry && err.startsWith('Timeout')) {
+                // retry once for timeout
+                return getHatebu(url, true);
+            }
             console.error(`[Feedly はてブ] ${err}`);
             return await sendMessage('CACHE_HATEBU', {result: {
                 requested_url: url,
