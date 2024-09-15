@@ -6,6 +6,7 @@ English follows Japanese.
 
 ## 変更履歴
 
+-   2.1.8: (2024-09-15) Feedly 側仕様変更に伴い正しく動作しなくなっていたものを修正
 -   2.1.7: (2024-07-29)
     - Google Chrome の使用出来なくなった API により正しく動作しなくなっていたものを修正
     - Feedly 側仕様変更に伴い正しく動作しなくなっていたものを修正
@@ -35,6 +36,7 @@ A Google Chrome extension to add Hatena bookmark information into Feedly
 
 ## Change log
 
+-   2.1.8: (2024-09-15) Fix a bug happening due to changes on Feedly side
 -   2.1.7: (2024-07-29)
     - Fix a bug happening due to some deprecated APIs of Google Chrome
     - Fix a bug happening due to changes on Feedly side
