@@ -161,16 +161,16 @@ const insertStyle = async () => {
         switch (position) {
             case 'left':
                 return `
-                    .entryHeader .EntryMetadata .fh-badge {
+                    .entryHeader .EntryMetadataWrapper .fh-badge {
                         margin: 0 8px 0 0;
                     }
                 `;
             case 'right':
                 return `
-                    .entryHeader .EntryMetadata {
+                    .entryHeader .EntryMetadataWrapper {
                         display: flex;
                     }
-                    .entryHeader .EntryMetadata .fh-badge {
+                    .entryHeader .EntryMetadataWrapper .fh-badge {
                         margin: 0 0 0 8px;
                         order: 1;
                     }
@@ -245,8 +245,8 @@ const createBadge = (hatebu) => {
     return badge;
 };
 
-const getEntryUrl = (entry) => {
-    const a = entry.querySelector('a.EntryTitleLink');
+const getEntryUrl = (entry, className = 'EntryTitleLink') => {
+    const a = entry.querySelector(`a.${className}`);
     if (!a) {
         return null;
     }
@@ -339,7 +339,7 @@ const handleU100Entry = async (entry) => {
     if (entry.querySelector('.fh-badge')) {
         return;
     }
-    const url = getEntryUrl('entryHeader', entry);
+    const url = getEntryUrl(entry, 'Article__title');
     const badge = await getHabetuBadge(url);
     if (!badge) {
         return;
@@ -347,7 +347,7 @@ const handleU100Entry = async (entry) => {
     if (entry.querySelector('.fh-badge')) {
         return;
     }
-    const metadata = entry.querySelector('.EntryMetadata');
+    const metadata = entry.querySelector('.EntryMetadataWrapper');
     metadata.insertBefore(badge, metadata.firstChild);
 };
 
