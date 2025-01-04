@@ -272,7 +272,7 @@ const handleTitleOnly = async (entry) => {
     if (entry.querySelector('.fh-badge')) {
         return;
     }
-    const content = entry.querySelector('div:has(>div>a)');
+    const content = entry.querySelector('div:has(>p>a)');
     content.insertBefore(badge, content.firstChild);
 }
 
