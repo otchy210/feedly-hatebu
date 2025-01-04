@@ -17,6 +17,7 @@ English follows Japanese.
 ## 変更履歴
 
 <!-- -   3.0.0: (2023-xx-xx) Google Chrome エクステンションの Manifest v3 対応に伴いプロキシサーバ方式を採用 -->
+-   2.1.9: (2025-01-05) Feedly 側仕様変更に伴い正しく動作しなくなっていたものを修正
 -   2.1.8: (2024-09-15) Feedly 側仕様変更に伴い正しく動作しなくなっていたものを修正
 -   2.1.7: (2024-07-29)
     - Google Chrome の使用出来なくなった API により正しく動作しなくなっていたものを修正
@@ -47,6 +48,7 @@ A Google Chrome extension to add Hatena bookmark information into Feedly
 
 ## Change log
 
+-   2.1.9: (2025-01-05) Fix a bug happening due to changes on Feedly side
 -   2.1.8: (2024-09-15) Fix a bug happening due to changes on Feedly side
 -   2.1.7: (2024-07-29)
     - Fix a bug happening due to some deprecated APIs of Google Chrome
