@@ -18,9 +18,9 @@ const ReleaseNotes = ({handleClick}) => {
     return <Section>
         <SectionTitle>更新情報{handleClick ? <SmallLink onClick={handleClick}>[更新情報をどかす]</SmallLink> : null}</SectionTitle>
         <SectionBody>
-            Ver 3.0.0 [2023-xx-xx]<br />
+            Ver 3.0.0 [2025-09-30]<br />
             <Caution>はてブ API から情報を取得するためにローカル環境にプロキシサーバを立てなくてはならなくなりました。</Caution><br />
-            Google Chrome エクステンションの Manifest が v2 から v3 にバージョンアップするのに伴いプライバシー保護機能が強化され、<Link href="https://qiita.com/otchy/items/c8506f21788e97097097" target="_blank">従来は有効だった抜け穴</Link>が塞がれてしまい、もはやプロキシサーバを立てる以外の回避策が存在しないためです。このエクステンションは Manifest v2 のまま本機能の提供を続けていましたが、<Link href="https://forest.watch.impress.co.jp/docs/news/1443758.html" target="_blank">2023 年 6 月の v2 サポート終了</Link>に際して v3 への移行が避けられなくなりました。さほど手間にならないように配慮しているので、詳しくは <Link href="https://github.com/otchy210/feedly-hatebu#readme" target="_blank">Feedly はてブのホームページ</Link>を参照してプロキシサーバをローカルに立てて下さい。
+            Google Chrome エクステンションの Manifest が v2 から v3 にバージョンアップするのに伴いプライバシー保護機能が強化され、<Link href="https://qiita.com/otchy/items/c8506f21788e97097097" target="_blank">従来は有効だった抜け穴</Link>が塞がれてしまい、もはやプロキシサーバを立てる以外の回避策が存在しないためです。このエクステンションは Manifest v2 のまま本機能の提供をずっと続けており、v2 が使えなくなった後も<Link href="https://www.naporitansushi.com/chrome-force-enable-manifest-v2-extension/" target="_blank">無理やり使う方法</Link>で延命したりしておりましたが、Google Chrome のバージョンが v140 になり、とうとう Manifest v3 への移行が避けられなくなりました。さほど手間にならないように配慮しているので、<Link href="https://github.com/otchy210/feedly-hatebu#readme" target="_blank">Feedly はてブのホームページ</Link>を参照してプロキシサーバをローカルに立てて下さい。
         </SectionBody>
         <SectionBody>
             <details>
