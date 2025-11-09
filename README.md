@@ -8,10 +8,10 @@
 
 プロキシサーバの実行ファイルは以下から入手できます。
 
-- Wiindows 版: [feedly-hatebu-proxy-windows-1.0.0.exe](https://github.com/otchy210/feedly-hatebu-proxy/raw/refs/heads/main/out/feedly-hatebu-proxy-windows-1.0.0.exe)
+- Wiindows 版: [feedly-hatebu-proxy-windows-1.0.1.exe](https://github.com/otchy210/feedly-hatebu-proxy/raw/refs/heads/main/out/feedly-hatebu-proxy-windows-1.0.1.exe)
     - Windows 版はダウンロードした実行ファイルを任意の場所 (通常は "C:¥Program Files") に置いて実行してください。セキュリティの警告などが表示された場合は、実行を許可する必要があります。
     - 一度実行したアプリケーションはタスクトレイに常駐しますが、デフォルトでは Windows を再起動しても自動では立ち上がらないので、必要に応じてご自身で設定してください。
-- Mac 版: [feedly-hatebu-proxy-darwin-x64-1.0.0.zip](https://github.com/otchy210/feedly-hatebu-proxy/raw/refs/heads/main/out/feedly-hatebu-proxy-darwin-x64-1.0.0.zip)
+- Mac 版: [feedly-hatebu-proxy-darwin-x64-1.0.1.zip](https://github.com/otchy210/feedly-hatebu-proxy/raw/refs/heads/main/out/feedly-hatebu-proxy-darwin-x64-1.0.1.zip)
     - Mac 版は、ダウンロードした zip ファイルを解凍し、出て来たアプリケーションのパッケージを、"アプリケーション" フォルダに置いて実行してください。セキュリティの警告などが表示された場合は、実行を許可する必要があります。
     - 一度実行したアプリケーションはメニューバーに常駐しますが、デフォルトでは Mac を再起動しても自動では立ち上がらないので、必要に応じてご自身で設定してください。
 
