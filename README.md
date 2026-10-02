@@ -1,6 +1,12 @@
 # Feedly はてブ
 
-はてなブックマークの情報を Feedly に追加する Google Chromoe エクステンションです。エクステンションは [Chrome ウェブストア](https://chromewebstore.google.com/detail/feedly-%E3%81%AF%E3%81%A6%E3%83%96/ggaaakgimbjhmglfoahnaoknmceipgni)からインストールすることが出来ます。
+はてなブックマークの情報を Feedly に追加する Google Chrome エクステンションです。エクステンションは [Chrome ウェブストア](https://chromewebstore.google.com/detail/feedly-%E3%81%AF%E3%81%A6%E3%83%96/ggaaakgimbjhmglfoahnaoknmceipgni)からインストールすることが出来ます。
+
+## 開発・保守ドキュメント
+
+- [AI エージェント向け作業ガイド](AGENTS.md): 作業の入口、編集方針、互換性上の注意
+- [開発・検証・リリースガイド](docs/development.md): セットアップ、ビルド、Chrome での確認、配布物の作成
+- [構成と保守上の注意](docs/architecture.md): 処理経路、設定・通信の契約、既知の注意点
 
 ## ローカルプロキシサーバ
 
